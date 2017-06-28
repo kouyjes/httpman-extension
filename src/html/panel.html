@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>httpman</title>
+    <link href="../vendor/bootstrap/dist/css/bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../vendor/jsoneditor/dist/jsoneditor.css" rel="stylesheet" type="text/css">
+    <link href="../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../vendor/jsoneditor/dist/jsoneditor.js"></script>
+    <script src="../vendor/jquery/dist/jquery.js"></script>
+    <script src="../vendor/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="../vendor/vue/dist/vue.js"></script>
+    <script src="../js/env.js"></script>
+    <script src="../js/http.js"></script>
+    <script src="../js/directive.js"></script>
+    <script src="../js/main.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div class="panel panel-info">
+            <header class="panel-heading">
+                <button v-on:click="send()" class="btn btn-xs btn-success">
+                    发送
+                </button>
+            </header>
+            <div>
+                <div class="c-row c-row-layout">
+                    <div class="c-row-title">
+                        <label>请求方法:</label>
+                    </div>
+                    <div class="c-row-input">
+                        <div class="http-method dropdown">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                {{selection.method}}
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                <li v-for="method in config.methods" v-on:click="selectMethod(method)">
+                                    <a href="#">{{method}}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="c-row c-row-layout">
+                    <div class="c-row-title">
+                        <label>URL:</label>
+                    </div>
+                    <div class="c-row-input">
+                        <textarea v-model="selection.url"></textarea>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="panel panel-warning">
+            <header class="panel-heading">
+                请求体信息
+            </header>
+            <div>
+                <div class="c-row c-row-layout">
+                    <div class="c-row-title">
+                        <label>Content-Type:</label>
+                    </div>
+                    <div class="c-row-input">
+                        <div class="http-method dropdown">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                {{selection.contentType.name}}
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                <li v-for="contentType in config.contentTypes" v-on:click="selectContentType(contentType)">
+                                    <a href="#">{{contentType.name}}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="c-row c-row-layout" v-if="selection.contentType.name==='Json'">
+                    <div class="c-row-title">
+                        <label>请求报文:</label>
+                    </div>
+                    <div class="c-row-input">
+                        <div v-json-editor="selection.body"></div>
+                    </div>
+                </div>
+                <div v-if="selection.contentType.name!=='Json'">
+                    <div class="c-row-layout text-right" v-if="selection.body.params.length===0">
+                        <button class="btn btn-primary" v-on:click="addParam()">添加参数</button>
+                    </div>
+                    <div v-for="param in selection.body.params" class="c-row-param c-row-layout">
+                        <div class="param-field">
+                            <input type="text" v-model="param.name" placeholder="请输入参数名称"/>
+                        </div>
+                        <div class="param-field">
+                            <input type="text" v-model="param.value" placeholder="请输入参数值"/>
+                        </div>
+                        <div class="param-field">
+                            <button v-on:click="addParam(param)" class="glyphicon glyphicon-plus"></button>
+                            <button v-on:click="removeParam(param)" class="glyphicon glyphicon-minus"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-success">
+            <header class="panel-heading">响应报文</header>
+            <div>
+                {{response.text}}
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

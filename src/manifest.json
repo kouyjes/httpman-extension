@@ -1,0 +1,24 @@
+{
+  "manifest_version": 2,
+  "name": "__MSG_CHROME_HANGOUTS_SHORT_NAME__",
+  "description": "label plugin",
+  "version": "1.0",
+  "background": {
+    "persistent": false,
+    "scripts":["index.js"]
+  },
+  "default_locale": "en",
+  "content_security_policy": "script-src 'self' 'unsafe-eval';  object-src 'self'",
+  "browser_action": {
+    "default_title": "http助手",
+    "default_icon": "images/icon.png"
+  },
+  "icons": {
+    "128": "images/icon.png",
+    "48": "images/icon.png"
+  },
+  "permissions": [
+    "clipboardWrite", "clipboardRead", "storage","unlimitedStorage","downloads","downloads.shelf", "background", "idle", "notifications","tabs","<all_urls>"
+  ],
+  "web_accessible_resources": [ "*" ]
+}
