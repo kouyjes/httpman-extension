@@ -10,7 +10,7 @@
   "default_locale": "en",
   "content_security_policy": "script-src 'self' 'unsafe-eval';  object-src 'self'",
   "browser_action": {
-    "default_title": "http助手",
+    "default_title": "http helper",
     "default_icon": "images/icon.png"
   },
   "icons": {

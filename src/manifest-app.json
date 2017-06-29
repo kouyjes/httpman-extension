@@ -1,0 +1,20 @@
+{
+  "manifest_version": 2,
+  "name": "__MSG_CHROME_HANGOUTS_SHORT_NAME__",
+  "description": "httpman ",
+  "version": "1.0",
+  "app": {
+    "background": {
+      "scripts": ["index.js"]
+    }
+  },
+  "default_locale": "en",
+
+  "icons": {
+    "128": "images/icon.png",
+    "48": "images/icon.png"
+  },
+  "permissions": [
+
+  ]
+}
