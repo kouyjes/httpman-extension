@@ -123,7 +123,8 @@ html, body {
     outline: none; }
   #app .c-row-param {
     width: 100%;
-    white-space: nowrap; }
+    white-space: nowrap;
+    min-height: 30px; }
     #app .c-row-param > .param-field {
       overflow: hidden;
       padding: 0 8px; }
@@ -140,7 +141,12 @@ html, body {
         width: 200px; }
       #app .c-row-param > .param-field.param-field-opt {
         width: 120px; }
+      #app .c-row-param > .param-field.param-field-split {
+        width: 30px; }
       #app .c-row-param > .param-field.param-field-input {
         flex: 1; }
+      #app .c-row-param > .param-field.param-field-text {
+        word-break: break-all;
+        white-space: normal; }
 
 /*# sourceMappingURL=main.css.map */

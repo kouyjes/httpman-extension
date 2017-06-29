@@ -182,5 +182,23 @@ var HttpRequest = (function () {
         }
         return option;
     };
+    HttpRequest.prototype._send = function (option) {
+        return new Promise(function (resolve,reject) {
+            $.ajax(option).then(function (data,state,xhr) {
+                resolve.call(this,arguments);
+            }, function () {
+                reject.call(this,arguments);
+            });
+        });
+    };
+    HttpRequest.prototype.send = function () {
+        var option = this.build();
+        var _ = this;
+        return JsRuntime.removeAllCookies(option.url).then(function () {
+            return JsRuntime.addAllCookies(option.url,option.cookies);
+        }).then(function () {
+            return _._send(option);
+        }.bind(this));
+    };
     return HttpRequest;
 })();

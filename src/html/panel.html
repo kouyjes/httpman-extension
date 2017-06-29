@@ -145,17 +145,25 @@
             </div>
             <div v-if="response.tabState==='Headers'"  class="flex-item">
                 <div v-for="header in response.headers" class="flex c-row-param c-row-layout">
-                    <div class="param-field param-field-name">
+                    <div class="flex flex-v-center param-field param-field-name">
                         {{header.name}}
                     </div>
-                    <div class="param-field param-field-opt">:</div>
-                    <div class="flex-item param-field param-field-input">
+                    <div class="param-field param-field-split flex flex-v-center">:</div>
+                    <div class="flex-item param-field param-field-input param-field-text">
                         {{header.value}}
                     </div>
                 </div>
             </div>
             <div v-if="response.tabState==='Cookies'"  class="flex-item">
-                {{response.text}}
+                <div v-for="cookie in response.cookies" class="flex c-row-param c-row-layout">
+                    <div class="flex flex-v-center param-field param-field-name">
+                        {{cookie.name}}
+                    </div>
+                    <div class="param-field param-field-split flex flex-v-center">:</div>
+                    <div class="flex-item param-field param-field-input param-field-text">
+                        {{cookie.value}}
+                    </div>
+                </div>
             </div>
         </div>
 

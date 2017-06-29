@@ -58,21 +58,8 @@ $(function () {
                 var selection = this.selection;
                 var _ = this;
                 _.status.loading = true;
-                var option = selection.build();
-                option.cookies.forEach(function (cookie) {
-                    if(!cookie.name){
-                        return;
-                    }
-                    chrome.cookies.set({
-                        url:option.url,
-                        name:cookie.name,
-                        value:cookie.value,
-                        domain:cookie.domain,
-                        path:cookie.path
-                    });
-                });
-
-                $.ajax(option).then(function (data,state,xhr) {
+                selection.send().then(function (result) {
+                    var data = result[0],xhr = result[2];
                     _.response.headers = [];
                     var headerString = xhr.getAllResponseHeaders();
                     if(headerString){
@@ -91,14 +78,18 @@ $(function () {
                         });
                     }
                     _.response.text = JSON.stringify(data);
-
-
-                    chrome.cookies.getAll({
-                        url:option.url
-                    }, function (cookies) {
-                        console.log(cookies);
+                    JsRuntime.getAllCookies(_.selection.url).then(function (cookies) {
+                        _.response.cookies = cookies.map(function (cookie) {
+                            return {
+                                name:cookie.name,
+                                value:cookie.value,
+                                path:cookie.path,
+                                domain:cookie.domain
+                            };
+                        });
                     });
                 });
+
             }
         }
     });

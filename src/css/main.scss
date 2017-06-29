@@ -170,6 +170,7 @@ html,body{
   .c-row-param{
     width:100%;
     white-space: nowrap;
+    min-height:30px;
     >.param-field{
       overflow:hidden;
       padding:0 8px;
@@ -191,8 +192,15 @@ html,body{
       &.param-field-opt{
         width:120px;
       }
+      &.param-field-split{
+        width:30px;
+      }
       &.param-field-input{
         flex:1;
+      }
+      &.param-field-text{
+        word-break: break-all;
+        white-space:normal;
       }
     }
   }

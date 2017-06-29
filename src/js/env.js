@@ -208,3 +208,52 @@ JsRuntime.download = function (content,filename,saveAs) {
 JsRuntime.getAbsoluteUrl = function (url) {
     return chrome.runtime.getURL(url);
 };
+JsRuntime.setCookie = function (url,cookie) {
+    return new Promise(function (resolve) {
+        chrome.cookies.set({
+            url:url,
+            name:cookie.name,
+            value:cookie.value,
+            domain:cookie.domain,
+            path:cookie.path
+        }, function (d) {
+            resolve(d);
+        });
+    });
+
+};
+JsRuntime.addAllCookies = function (url,cookies) {
+    var promises = [];
+    cookies.forEach(function (cookie) {
+        promises.push(this.setCookie(url,cookie));
+    }.bind(this));
+    return Promise.all(promises);
+};
+JsRuntime.getAllCookies = function (url) {
+    return new Promise(function (resolve,reject) {
+        chrome.cookies.getAll({
+            url:url
+        }, function (cookies) {
+            resolve(cookies);
+        });
+    });
+};
+JsRuntime.removeCookie = function (url,name) {
+    return new Promise(function (resolve,reject) {
+        chrome.cookies.remove({
+            url:url,
+            name:name
+        }, function (d) {
+            resolve(d);
+        });
+    });
+};
+JsRuntime.removeAllCookies = function (url) {
+    return this.getAllCookies(url).then(function (cookies) {
+        var promises = [];
+        cookies.forEach(function (cookie) {
+            promises.push(this.removeCookie(url,cookie.name));
+        }.bind(this));
+        return  Promise.all(promises);
+    }.bind(this));
+};
