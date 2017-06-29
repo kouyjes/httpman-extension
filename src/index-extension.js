@@ -5,7 +5,7 @@ function createPanel(){
         opened = true;
         chrome.windows.create({
             url: 'html/panel.html',
-            type: 'panel',
+            type: 'popup',
             focused: true,
             top:300,
             left:500,
