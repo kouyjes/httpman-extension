@@ -20,46 +20,57 @@
     border-radius: 8px;
   }
 }
+$inputBorderColor:#ccc;
 html,body{
   margin:0;
   padding:0;
   width:100%;
   height:100%;
-  overflow:hidden;
+  overflow:auto;
 }
 #app{
   width:100%;
   height:100%;
-  overflow:auto;
+  min-height:680px;
+  overflow:hidden;
+  display:flex;
+  flex-direction: column;
+  .jsoneditor-poweredBy{
+    display:none;
+  }
+  textarea,input{
+    outline:none;
+  }
   textarea{
     resize: none;
     width:100%;
     height:50px;
-    outline:none;
   }
-  .panel{
-    border-radius:0 !important;
-    .panel-heading{
-      border-radius: 0 !important;
+  input{
+    border: 1px solid $inputBorderColor;
+    text-indent:8px;
+  }
+  .file-input{
+    display:none;
+  }
+  .basic-info{
+    height:55px;
+    input{
+      height:34px;
+      width:100%;
+      border-left:none;
     }
-  }
-  .c-row-layout{
-    padding:10px;
-  }
-  .c-row{
-    display:flex;
-    flex-direction: row;
-    align-items: center;
-    list-tyle:none;
-    margin:0;
+    .btn{
+      border-radius:0;
+    }
     .c-row-title{
-      width:100px;
-    }
-    .c-row-input{
-      flex:1;
+      overflow:visible !important;
+      &:last-child{
+        width:60px;
+      }
     }
     .http-method{
-      width:200px;
+      width:100%;
       .caret{
         float: right;
         margin-top: 8px;
@@ -67,6 +78,7 @@ html,body{
       button{
         width:100%;
         border-radius:0;
+        outline:none;
       }
       .dropdown-menu{
         width:100%;
@@ -74,11 +86,90 @@ html,body{
       }
     }
   }
+  .flex{
+    display:flex;
+    margin:0;
+  }
+  .flex-v-center{
+    align-items: center;
+  }
+  .flex-h-center{
+    justify-content: center;
+  }
+  .flex-column{
+    flex-direction: column;
+  }
+  .flex-row{
+    flex-direction:row;
+  }
+  .flex-item{
+    flex:1;
+  }
+  .float-left{
+    float:left;
+  }
+  .layout-option{
+    height:40px;
+  }
+  .height100{
+    height:100%;
+  }
+  .tab-item{
+    cursor:pointer;
+  }
+  .tab-active{
+    background-color: #c3e2e6;
+    border-radius: 2px;
+  }
+  .panel{
+    border-radius:0 !important;
+    .panel-heading{
+      width:100%;
+      padding:0;
+      border-radius: 0 !important;
+      overflow:hidden;
+      .header-tab{
+        height:40px;
+        width:100px;
+        border-right:1px solid #ccc;
+        padding:4px 0;
+        float:left;
+        cursor:pointer;
+      }
+    }
+    >div{
+      &:last-child{
+        display:flex;
+        width:100%;
+        height:100%;
+        overflow:auto;
+        flex-direction: column;
+      }
+    }
+  }
+  .c-row-layout{
+    padding:5px;
+  }
+  .c-row{
+    list-tyle:none;
+    margin:0;
+    .c-row-title{
+      width:100px;
+      height:100%;
+      overflow: hidden;
+      text-align: center;
+    }
+    .c-row-input{
+      overflow: hidden;
+    }
+  }
+  .add-param-btn{
+    width:100px;
+    outline:none;
+  }
   .c-row-param{
     width:100%;
-    display:flex;
-    flex-direction: row;
-    align-items: center;
+    white-space: nowrap;
     >.param-field{
       overflow:hidden;
       padding:0 8px;
@@ -86,14 +177,22 @@ html,body{
         width:100%;
         outline:none;
       }
-      &:nth-child(1){
+      button{
+        outline:none;
+        border: 1px solid #a99393;
+        background-color: #b7f1be;
+        &:active{
+          background-color:#ace4b3;
+        }
+      }
+      &.param-field-name{
         width:200px;
       }
-      &:nth-child(2){
-        flex:1;
+      &.param-field-opt{
+        width:120px;
       }
-      &:nth-child(3){
-        width:80px;
+      &.param-field-input{
+        flex:1;
       }
     }
   }

@@ -1,3 +1,37 @@
+var BaseHttp = (function () {
+    function BaseHttp(){
+        this.tabs = ['Body','Headers','Cookies'];
+        this.tabState = this.tabs[0];
+    }
+    BaseHttp.prototype.setTabState = function (tab) {
+        this.tabState = tab;
+    };
+    return BaseHttp;
+})();
+var HttpResponse = (function () {
+    function HttpResponse(response){
+        BaseHttp.apply(this,arguments);
+        if(response){
+            Object.assign(this,response);
+        }
+        this.text = '';
+        this.headers = [];
+        this.cookies = [];
+    }
+    HttpResponse.prototype = Object.create(BaseHttp.prototype);
+    return HttpResponse;
+})();
+var HttpHeaders = (function () {
+    function HttpHeaders(headers){
+        if(headers){
+            Object.assign(this,headers);
+        }
+    }
+    HttpHeaders.prototype.size = function () {
+        return Object.keys(this).length;
+    };
+    return HttpHeaders;
+})();
 var HttpRequest = (function () {
     HttpRequest.config = {
         methods:['GET','POST','UPDATE','PUT','DELETE','OPTION'],
@@ -19,10 +53,14 @@ var HttpRequest = (function () {
             }
         ]
     };
-    function HttpRequestBody(){
+    function HttpRequestBody(body){
+
+        if(body){
+            Object.assign(this,body);
+        }
         this.object = {};
         this.params = [];
-        this.files = [];
+
     }
     HttpRequestBody.prototype.toJson = function () {
         return JSON.stringify(this.object);
@@ -39,24 +77,29 @@ var HttpRequest = (function () {
     };
     HttpRequestBody.prototype.getFormData = function () {
         var formData = new FormData();
-        this.files.forEach(function (fileItem) {
-            formData.append(fileItem.name,fileItem.value);
-        });
         this.params.forEach(function (param) {
             formData.append(param.name,param.value);
         });
         return formData;
     };
     function HttpRequest(httpRequest){
+
+        BaseHttp.apply(this,arguments);
         this.method = HttpRequest.config.methods[0];
         this.url = '';
-        this.headers = {};
+        this.headers = [];
+        this.cookies = [];
         this.contentType = HttpRequest.config.contentTypes[0];
         this.body = new HttpRequestBody();
+
         if(httpRequest){
             Object.assign(this,httpRequest);
         }
+        if(!(this.body instanceof HttpRequestBody)){
+            this.body = new HttpRequestBody(this.body);
+        }
     }
+    HttpRequest.prototype = Object.create(BaseHttp.prototype);
     HttpRequest.serializeArray = function (params) {
         var paramStrings = [];
         params.forEach(function (param) {
@@ -67,12 +110,46 @@ var HttpRequest = (function () {
         });
         return paramStrings.join('&');
     };
+    HttpRequest.prototype.setContentType = function (contentType) {
+        if(['Urlencoded','Multipart'].indexOf(contentType.name) >= 0){
+            Object.keys(this.body.object).forEach(function (key) {
+                if(!key){
+                    return;
+                }
+                var value = this.body.object[key];
+                if(typeof value === 'string'){
+                    this.body.params.push({
+                        name:key,
+                        value:value
+                    });
+                }
+            }.bind(this));
+            this.body.object = {};
+        }else{
+            this.body.params.forEach(function (param) {
+                if(param.name && param.type !== 'file'){
+                    this.body.object[param.name] = param.value;
+                }
+            }.bind(this));
+            this.body.params = [];
+        }
+
+        this.contentType = contentType;
+    };
     HttpRequest.prototype.template = function () {
+        var headers = {};
+        this.headers.forEach(function (header) {
+            if(header.name && header.value){
+                headers[header.name] = header.value;
+            }
+        });
         var option = {
             method : this.method,
             xhrFields: {
                 withCredentials: true
             },
+            headers:headers,
+            cookies:[].concat(this.cookies),
             url : this.url,
             contentType : this.contentType.value
         };
@@ -83,7 +160,7 @@ var HttpRequest = (function () {
         if(!method){
             method = this['_default_'];
         }
-        method.call(this);
+        return method.call(this);
     };
     HttpRequest.prototype['_default_'] = function () {
         var option = this.template();

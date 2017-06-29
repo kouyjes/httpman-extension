@@ -16,60 +16,131 @@ html, body {
   padding: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden; }
+  overflow: auto; }
 
 #app {
   width: 100%;
   height: 100%;
-  overflow: auto; }
+  min-height: 680px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column; }
+  #app .jsoneditor-poweredBy {
+    display: none; }
+  #app textarea, #app input {
+    outline: none; }
   #app textarea {
     resize: none;
     width: 100%;
-    height: 50px;
-    outline: none; }
+    height: 50px; }
+  #app input {
+    border: 1px solid #ccc;
+    text-indent: 8px; }
+  #app .file-input {
+    display: none; }
+  #app .basic-info {
+    height: 55px; }
+    #app .basic-info input {
+      height: 34px;
+      width: 100%;
+      border-left: none; }
+    #app .basic-info .btn {
+      border-radius: 0; }
+    #app .basic-info .c-row-title {
+      overflow: visible !important; }
+      #app .basic-info .c-row-title:last-child {
+        width: 60px; }
+    #app .basic-info .http-method {
+      width: 100%; }
+      #app .basic-info .http-method .caret {
+        float: right;
+        margin-top: 8px; }
+      #app .basic-info .http-method button {
+        width: 100%;
+        border-radius: 0;
+        outline: none; }
+      #app .basic-info .http-method .dropdown-menu {
+        width: 100%;
+        border-radius: 0; }
+  #app .flex {
+    display: flex;
+    margin: 0; }
+  #app .flex-v-center {
+    align-items: center; }
+  #app .flex-h-center {
+    justify-content: center; }
+  #app .flex-column {
+    flex-direction: column; }
+  #app .flex-row {
+    flex-direction: row; }
+  #app .flex-item {
+    flex: 1; }
+  #app .float-left {
+    float: left; }
+  #app .layout-option {
+    height: 40px; }
+  #app .height100 {
+    height: 100%; }
+  #app .tab-item {
+    cursor: pointer; }
+  #app .tab-active {
+    background-color: #c3e2e6;
+    border-radius: 2px; }
   #app .panel {
     border-radius: 0 !important; }
     #app .panel .panel-heading {
-      border-radius: 0 !important; }
+      width: 100%;
+      padding: 0;
+      border-radius: 0 !important;
+      overflow: hidden; }
+      #app .panel .panel-heading .header-tab {
+        height: 40px;
+        width: 100px;
+        border-right: 1px solid #ccc;
+        padding: 4px 0;
+        float: left;
+        cursor: pointer; }
+    #app .panel > div:last-child {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      flex-direction: column; }
   #app .c-row-layout {
-    padding: 10px; }
+    padding: 5px; }
   #app .c-row {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
     list-tyle: none;
     margin: 0; }
     #app .c-row .c-row-title {
-      width: 100px; }
+      width: 100px;
+      height: 100%;
+      overflow: hidden;
+      text-align: center; }
     #app .c-row .c-row-input {
-      flex: 1; }
-    #app .c-row .http-method {
-      width: 200px; }
-      #app .c-row .http-method .caret {
-        float: right;
-        margin-top: 8px; }
-      #app .c-row .http-method button {
-        width: 100%;
-        border-radius: 0; }
-      #app .c-row .http-method .dropdown-menu {
-        width: 100%;
-        border-radius: 0; }
+      overflow: hidden; }
+  #app .add-param-btn {
+    width: 100px;
+    outline: none; }
   #app .c-row-param {
     width: 100%;
-    display: flex;
-    flex-direction: row;
-    align-items: center; }
+    white-space: nowrap; }
     #app .c-row-param > .param-field {
       overflow: hidden;
       padding: 0 8px; }
       #app .c-row-param > .param-field input {
         width: 100%;
         outline: none; }
-      #app .c-row-param > .param-field:nth-child(1) {
+      #app .c-row-param > .param-field button {
+        outline: none;
+        border: 1px solid #a99393;
+        background-color: #b7f1be; }
+        #app .c-row-param > .param-field button:active {
+          background-color: #ace4b3; }
+      #app .c-row-param > .param-field.param-field-name {
         width: 200px; }
-      #app .c-row-param > .param-field:nth-child(2) {
+      #app .c-row-param > .param-field.param-field-opt {
+        width: 120px; }
+      #app .c-row-param > .param-field.param-field-input {
         flex: 1; }
-      #app .c-row-param > .param-field:nth-child(3) {
-        width: 80px; }
 
 /*# sourceMappingURL=main.css.map */

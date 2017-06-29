@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "__MSG_CHROME_HANGOUTS_SHORT_NAME__",
-  "description": "label plugin",
+  "description": "httpman ",
   "version": "1.0",
   "background": {
     "persistent": false,
@@ -18,7 +18,7 @@
     "48": "images/icon.png"
   },
   "permissions": [
-    "clipboardWrite", "clipboardRead", "storage","unlimitedStorage","downloads","downloads.shelf", "background", "idle", "notifications","tabs","<all_urls>"
+    "cookies","clipboardWrite", "clipboardRead", "storage","unlimitedStorage","downloads","downloads.shelf", "background", "idle", "notifications","tabs","<all_urls>"
   ],
   "web_accessible_resources": [ "*" ]
 }

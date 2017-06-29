@@ -11,47 +11,93 @@ $(function () {
                     url:'http://172.24.65.164:8081'
                 }
             ),
-            response:{
-                text:''
-            }
+            response:new HttpResponse()
         },
         methods:{
             selectMethod: function (method) {
                 this.selection.method = method;
             },
             selectContentType: function (contentType) {
-                this.selection.contentType = contentType;
+                this.selection.setContentType(contentType);
             },
-            addParam: function (param) {
-                var body = this.selection.body;
-                var p = {
+            addItem: function (items,item) {
+                var itemObj = {
                     name:'',
                     value:''
                 };
-                if(!param){
-                    body.params.push(p);
+                if(!item){
+                    items.push(itemObj);
                     return;
                 }
-                var index = body.params.indexOf(param);
+                var index = items.indexOf(item);
                 if(index >= 0){
-                    body.params.splice(index + 1,0,p);
+                    items.splice(index + 1,0,itemObj);
                 }else{
-                    body.params.push(p);
+                    items.push(itemObj);
                 }
             },
-            removeParam: function (param) {
-                var body = this.selection.body;
-                var index = body.params.indexOf(param);
+            removeItem: function (items,item) {
+                var index = items.indexOf(item);
                 if(index >= 0){
-                    body.params.splice(index,1);
+                    items.splice(index,1);
                 }
+            },
+            addParam: function (param) {
+                this.addItem(this.selection.body.params,param);
+            },
+            removeParam: function (param) {
+                this.removeItem(this.selection.body.params,param);
+            },
+            addHeader: function (header) {
+                this.addItem(this.selection.headers,header);
+            },
+            removeHeader: function (header) {
+                this.removeItem(this.selection.headers,header);
             },
             send: function () {
                 var selection = this.selection;
                 var _ = this;
                 _.status.loading = true;
-                $.ajax(selection.build()).then(function (data) {
+                var option = selection.build();
+                option.cookies.forEach(function (cookie) {
+                    if(!cookie.name){
+                        return;
+                    }
+                    chrome.cookies.set({
+                        url:option.url,
+                        name:cookie.name,
+                        value:cookie.value,
+                        domain:cookie.domain,
+                        path:cookie.path
+                    });
+                });
+
+                $.ajax(option).then(function (data,state,xhr) {
+                    _.response.headers = [];
+                    var headerString = xhr.getAllResponseHeaders();
+                    if(headerString){
+                        headerString.split(/\n/).forEach(function (str) {
+                            str = str.trim();
+                            if(!str){
+                                return;
+                            }
+                            var index = str.indexOf(':');
+                            var name = str.slice(0,index);
+                            var value = str.slice(index + 1);
+                            _.response.headers.push({
+                                name:name,
+                                value:value
+                            });
+                        });
+                    }
                     _.response.text = JSON.stringify(data);
+
+
+                    chrome.cookies.getAll({
+                        url:option.url
+                    }, function (cookies) {
+                        console.log(cookies);
+                    });
                 });
             }
         }
