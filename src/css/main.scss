@@ -36,6 +36,23 @@ body{
     -webkit-user-select: none;
   }
 
+  .logo{
+    display:none;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    img{
+      width:100%;
+      height:100%;
+    }
+  }
+  &[initing]{
+    .logo{
+      display:block;
+    }
+
+  }
+
 }
 [v-cloak]{
   display:none !important;
@@ -46,6 +63,7 @@ body{
   overflow:hidden;
   display:flex;
   flex-direction: column;
+
   .loading-state{
     float:right;
     height:100%;
@@ -87,6 +105,7 @@ body{
   }
   textarea,input{
     outline:none;
+    font-weight: normal;
   }
   input{
     border: 1px solid $inputBorderColor;
@@ -243,7 +262,6 @@ body{
       &.param-field-name{
         width:200px;
         font-weight: bold;
-        background-color:#dedddd;
       }
       &.param-field-opt{
         width:120px;
@@ -257,6 +275,9 @@ body{
       &.param-field-text{
         word-break: break-all;
         white-space:normal;
+        &.param-field-name{
+          background-color:#dedddd;
+        }
       }
     }
   }

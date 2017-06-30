@@ -23,6 +23,16 @@ body {
   border-top: 1px solid #ccc; }
   body .button, body button {
     -webkit-user-select: none; }
+  body .logo {
+    display: none;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; }
+    body .logo img {
+      width: 100%;
+      height: 100%; }
+  body[initing] .logo {
+    display: block; }
 
 [v-cloak] {
   display: none !important; }
@@ -59,7 +69,8 @@ body {
   #app .jsoneditor-poweredBy {
     display: none; }
   #app textarea, #app input {
-    outline: none; }
+    outline: none;
+    font-weight: normal; }
   #app input {
     border: 1px solid #ccc;
     text-indent: 8px; }
@@ -177,8 +188,7 @@ body {
           background-color: #ace4b3; }
       #app .c-row-param > .param-field.param-field-name {
         width: 200px;
-        font-weight: bold;
-        background-color: #dedddd; }
+        font-weight: bold; }
       #app .c-row-param > .param-field.param-field-opt {
         width: 120px; }
       #app .c-row-param > .param-field.param-field-split {
@@ -188,5 +198,7 @@ body {
       #app .c-row-param > .param-field.param-field-text {
         word-break: break-all;
         white-space: normal; }
+        #app .c-row-param > .param-field.param-field-text.param-field-name {
+          background-color: #dedddd; }
 
 /*# sourceMappingURL=main.css.map */

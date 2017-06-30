@@ -46,7 +46,6 @@
                 </div>
             </div>
         </div>
-
         <div class="flex flex-column flex-item">
             <div class="flex flex-column  panel panel-info panel-request" key="panel-request">
                 <header class="panel-heading">
@@ -177,11 +176,11 @@
                 <div v-if="response.tabState==='Cookies'"  class="flex-item">
                     <div class="content-panel">
                         <div v-for="cookie in response.cookies" class="flex c-row-param c-row-layout">
-                            <div class="flex flex-v-center param-field param-field-name">
+                            <div class="flex flex-v-center param-field param-field-name param-field-text flex flex-v-center">
                                 {{cookie.name}}
                             </div>
                             <div class="param-field param-field-split flex flex-v-center">:</div>
-                            <div class="flex-item param-field param-field-input param-field-text">
+                            <div class="flex-item param-field param-field-input param-field-text flex flex-v-center">
                                 {{cookie.value}}
                             </div>
                         </div>
@@ -190,11 +189,11 @@
                 <div v-if="response.tabState==='Abstract'"  class="flex-item">
                     <div class="content-panel">
                         <div v-if="value" v-for="(value,key) in response.abstract" class="flex c-row-param c-row-layout">
-                            <div class="flex flex-v-center param-field param-field-name">
+                            <div class="flex flex-v-center param-field param-field-name param-field-text flex flex-v-center">
                                 {{key}}
                             </div>
                             <div class="param-field param-field-split flex flex-v-center">:</div>
-                            <div class="flex-item param-field param-field-input param-field-text">
+                            <div class="flex-item param-field param-field-input param-field-text flex flex-v-center">
                                 {{value}}
                             </div>
                         </div>
