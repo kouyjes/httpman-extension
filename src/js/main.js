@@ -27,6 +27,7 @@ $(function () {
                 },
                 addItem: function (items,item) {
                     var itemObj = {
+                        id:JsRuntime.getId(),
                         name:'',
                         value:''
                     };
@@ -58,6 +59,13 @@ $(function () {
                 },
                 removeHeader: function (header) {
                     this.removeItem(this.selection.headers,header);
+                },
+                fileChange: function (p,param) {
+                    var params = this.selection.body.params;
+                    param.type = p.type;
+                    param.value = p.value;
+                    param.caption = p.caption;
+                    Vue.set(params,params.indexOf(param),param);
                 },
                 send: function () {
                     var selection = this.selection;

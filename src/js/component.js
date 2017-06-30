@@ -1,3 +1,4 @@
+var test = [];
 (function (Vue) {
     var loadingGridComp = {
         render: function (createElement) {
@@ -47,7 +48,33 @@
         template:'#response-view',
         props:['response']
     };
+    var fileComp = {
+        template:'#file-upload',
+        props:['value'],
+        methods:{
+            onClick: function () {
+                this.$refs.fileInput.click();
+            },
+            onFileChange: function () {
+                var fileInput = this.$refs.fileInput;
+                var files = fileInput.files;
+                if(files.length === 0){
+                    return;
+                }
+                var param = {};
+                var file = files[0];
+                param.type = 'file';
+                param.caption = fileInput.value || file.name;
+                param.value = file;
+
+                this.$emit('change',param);
+                test.push(param);
+
+            }
+        }
+    };
     Vue.component('loading-grid',loadingGridComp);
     Vue.component('loading-circle',loadingCircleComp);
     Vue.component('response-view',responseView);
+    Vue.component('file-upload',fileComp);
 })(Vue);

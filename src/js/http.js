@@ -12,12 +12,6 @@ var BaseHttp = (function () {
     return BaseHttp;
 })();
 var HttpResponse = (function () {
-    var _id = function () {
-        var id = 1;
-        return function () {
-            return id++;
-        }
-    };
     function HttpResponse(response){
         BaseHttp.apply(this,arguments);
         this.init();
@@ -27,7 +21,7 @@ var HttpResponse = (function () {
     }
     HttpResponse.prototype = Object.create(BaseHttp.prototype);
     HttpResponse.prototype.init = function () {
-        this.token = _id();
+        this.token = JsRuntime.getId();
         this.text = '';
         this.headers = [];
         this.cookies = [];
@@ -221,6 +215,7 @@ var HttpRequest = (function () {
         });
         var option = {
             method : this.method,
+            cache: false,
             xhrFields: {
                 withCredentials: true
             },

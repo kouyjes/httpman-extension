@@ -1,3 +1,8 @@
 <script type="text/v-template" id="response-view">
     <iframe v-if="response.text" src="about:blank" class="iframe-html-comp" v-iframe-html="response.text"></iframe>
 </script>
+<script type="text/v-template" id="file-upload">
+    <button v-on:click="onClick()">
+        <input ref="fileInput" v-on:change="onFileChange()" class="file-input" type="file" />
+    </button>
+</script>

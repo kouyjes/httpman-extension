@@ -8,7 +8,10 @@
                     return true;
                 },
                 onChange: function () {
-                    binding.value = el.editor.get();
+                    try{
+                        binding.value = el.editor.get();
+                    }catch(e){}
+
                 },
                 onError: function (err) {
 
@@ -18,25 +21,6 @@
                 }
             };
             el.editor = new JSONEditor(el, options,binding.value);
-        }
-    };
-    var fileSelect = {
-        inserted: function (el,binding,vNode) {
-            var fileInput = el.querySelector('input[type="file"]');
-            var param = binding.value;
-            fileInput.addEventListener('change', function () {
-                var files = fileInput.files;
-                if(files.length === 0){
-                    return;
-                }
-                var file = files[0];
-                param.type = 'file';
-                param.caption = fileInput.value || file.name;
-                param.value = file;
-            });
-            el.addEventListener('click', function () {
-                el.querySelector('input[type="file"]').click();
-            });
         }
     };
     var titleDesc = {
@@ -60,7 +44,6 @@
         }
     };
     Vue.directive('json-editor',jsonEditor);
-    Vue.directive('file-select',fileSelect);
     Vue.directive('title-desc',titleDesc);
     Vue.directive('iframe-html',iframeHtml);
 })(Vue);

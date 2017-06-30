@@ -97,6 +97,9 @@ chrome.tabs.onActivated.addListener(function (activeInfo) {
         }
     });
 });
+/*chrome.webRequest.onErrorOccurred.addListener(function (result) {
+    alert(error);
+});*/
 JsRuntime.createWindow = function (url) {
     var win = windowCache[url];
     if(win){
@@ -251,6 +254,12 @@ JsRuntime.removeCookie = function (url,name) {
             resolve(d);
         });
     });
+};
+JsRuntime.getId = function () {
+    var id = 1;
+    return function () {
+        return id++;
+    };
 };
 JsRuntime.removeAllCookies = function (url) {
     return this.getAllCookies(url).then(function (cookies) {

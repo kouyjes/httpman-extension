@@ -73,19 +73,18 @@
                                 <div v-if="selection.body.params.length===0" class="height100 flex flex-v-center flex-h-center">
                                     <button v-on:click="addParam()" class="add-param-btn btn btn-success glyphicon glyphicon-plus"></button>
                                 </div>
-                                <div v-for="param in selection.body.params" class="flex c-row-param c-row-layout">
+                                <div  v-for="(param,index) in selection.body.params" class="flex c-row-param c-row-layout">
                                     <div class="param-field param-field-name">
                                         <input type="text" v-model="param.name" v-title-desc placeholder="please input param name"/>
                                     </div>
                                     <div class="flex-item param-field param-field-input">
                                         <input v-if="param.type!=='file'" type="text" v-model="param.value" v-title-desc placeholder="please input param value"/>
-                                        <input readonly v-if="param.type==='file'" type="text" v-model="param.caption" v-title-desc />
+                                        <input readonly v-if="param.type==='file'" type="text" v-bind:value="param.caption" v-title-desc />
                                     </div>
                                     <div class="param-field param-field-opt">
 
-                                        <button v-if="selection.contentType.name==='Multipart'" v-file-select="param" class="glyphicon glyphicon-open" title="upload file">
-                                            <input class="file-input" type="file" />
-                                        </button>
+                                        <file-upload v-on:change="fileChange($event,param)" v-if="selection.contentType.name==='Multipart'" class="glyphicon glyphicon-open" title="upload file">
+                                        </file-upload>
                                         <button v-on:click="addParam(param)" class="glyphicon glyphicon-plus" title="add a param after this one"></button>
                                         <button v-on:click="removeParam(param)" class="glyphicon glyphicon-minus" title="remove this param"></button>
                                     </div>
