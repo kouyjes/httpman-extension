@@ -13,7 +13,7 @@ $(function () {
                 },
                 selection:new HttpRequest(
                     {
-                        url:'http://172.24.65.164:8081'
+                        url:'http://'
                     }
                 ),
                 response:new HttpResponse()
