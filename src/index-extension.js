@@ -1,5 +1,10 @@
 var opened = false;
 var panel = 0;
+var _width = screen.width * 0.65,
+    _height = screen.height * 0.65,
+    _left = (screen.width - _width) / 2,
+    _top = (screen.height - _height) /2;
+
 function createPanel(){
     if (opened === false){
         opened = true;
@@ -7,10 +12,10 @@ function createPanel(){
             url: 'html/panel.html',
             type: 'popup',
             focused: true,
-            top:300,
-            left:500,
-            width: 1500,
-            height: 600
+            top:_top,
+            left:_left,
+            width: _width,
+            height: _height
         }, function(window) {
             panel = window.id;
         });

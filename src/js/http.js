@@ -223,8 +223,7 @@ var HttpRequest = (function () {
             cookies:[].concat(this.cookies),
             url : this.url,
             contentType : this.contentType.value,
-            processData: false,
-            contentType: false
+            processData: false
         };
         return option;
     };
@@ -247,10 +246,12 @@ var HttpRequest = (function () {
     HttpRequest.prototype['POST'] = function () {
         var option = this.template();
         if(this.contentType.name === 'Multipart'){
+            option.contentType = false;
             option.data = this.body.getFormData();
         }else if(this.contentType.name === 'Json'){
             option.data = this.body.toJson();
         }else{
+            option.contentType = false;
             option.data = this.body.serializeArray();
         }
         return option;
