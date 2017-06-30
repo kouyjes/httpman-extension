@@ -43,125 +43,140 @@
                 </div>
             </div>
         </div>
-        <div class="flex flex-column flex-item panel panel-info">
-            <header class="panel-heading">
-                <div v-bind:class="{ 'tab-active': selection.tabState===tab}"
-                     v-for="tab in selection.tabs" class="flex flex-h-center flex-v-center header-tab" v-on:click="selection.setTabState(tab)">
-                    {{tab}}
-                </div>
-            </header>
-            <div class="flex flex-column flex-item" v-if="selection.tabState==='Body'">
-                <div class="c-row c-row-layout layout-option">
-                    <div v-bind:class="{ 'tab-active': selection.contentType===contentType}"
-                         v-for="contentType in config.contentTypes" v-on:click="selectContentType(contentType)"
-                         class="flex flex-h-center flex-v-center float-left c-row-title tab-item">
-                        {{contentType.name}}
+
+        <div class="flex flex-column flex-item">
+            <div class="flex flex-column  panel panel-info panel-request" key="panel-request">
+                <header class="panel-heading">
+                    <div v-bind:class="{ 'tab-active': selection.tabState===tab}"
+                         v-for="tab in selection.tabs" class="flex flex-h-center flex-v-center header-tab button" v-on:click="selection.setTabState(tab)">
+                        {{tab}}
+                    </div>
+                </header>
+                <div class="flex flex-column flex-item" v-if="selection.tabState==='Body'">
+                    <div class="c-row c-row-layout layout-option content-type">
+                        <div v-bind:class="{ 'tab-active': selection.contentType===contentType}"
+                             v-for="contentType in config.contentTypes" v-on:click="selectContentType(contentType)"
+                             class="flex flex-h-center flex-v-center float-left c-row-title tab-item button">
+                            {{contentType.name}}
+                        </div>
+                    </div>
+
+                    <div class="flex-item c-row c-row-layout json-editor" key="json-editor" v-if="selection.contentType.name==='Json'">
+                        <div  v-json-editor="selection.body.object" ></div>
+                    </div>
+
+                    <div class="flex flex-column flex-item c-row c-row-layout" key="param-editor" v-if="selection.contentType.name!=='Json'">
+                        <div class="flex-item">
+                            <div class="content-panel">
+                                <div v-if="selection.body.params.length===0" class="height100 flex flex-v-center flex-h-center">
+                                    <button v-on:click="addParam()" class="add-param-btn btn btn-success glyphicon glyphicon-plus"></button>
+                                </div>
+                                <div v-for="param in selection.body.params" class="flex c-row-param c-row-layout">
+                                    <div class="param-field param-field-name">
+                                        <input type="text" v-model="param.name" v-title-desc placeholder="please input param name"/>
+                                    </div>
+                                    <div class="flex-item param-field param-field-input">
+                                        <input v-if="param.type!=='file'" type="text" v-model="param.value" v-title-desc placeholder="please input param value"/>
+                                        <input readonly v-if="param.type==='file'" type="text" v-model="param.caption" v-title-desc />
+                                    </div>
+                                    <div class="param-field param-field-opt">
+
+                                        <button v-if="selection.contentType.name==='Multipart'" v-file-select="param" class="glyphicon glyphicon-open" title="upload file">
+                                            <input class="file-input" type="file" />
+                                        </button>
+                                        <button v-on:click="addParam(param)" class="glyphicon glyphicon-plus" title="add a param after this one"></button>
+                                        <button v-on:click="removeParam(param)" class="glyphicon glyphicon-minus" title="remove this param"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
-                <div class="flex-item c-row c-row-layout json-editor" key="json-editor" v-if="selection.contentType.name==='Json'">
-                    <div class="height100" v-json-editor="selection.body" ></div>
-                </div>
-
-                <div class="flex flex-column flex-item c-row c-row-layout" key="param-editor" v-if="selection.contentType.name!=='Json'">
-                    <div class="flex-item">
-                        <div v-if="selection.body.params.length===0" class="height100 flex flex-v-center flex-h-center">
-                            <button v-on:click="addParam()" class="add-param-btn btn btn-success glyphicon glyphicon-plus"></button>
+                <div class="flex-item" v-if="selection.tabState==='Headers'">
+                    <div class="height100 content-panel">
+                        <div v-if="selection.headers.length===0" class="height100 flex flex-v-center flex-h-center">
+                            <button v-on:click="addHeader()" class="add-param-btn btn btn-success glyphicon glyphicon-plus"></button>
                         </div>
-                        <div v-for="param in selection.body.params" class="flex c-row-param c-row-layout">
+                        <div v-for="header in selection.headers" class="flex c-row-param c-row-layout">
                             <div class="param-field param-field-name">
-                                <input type="text" v-model="param.name" v-title-desc placeholder="please input param name"/>
+                                <input type="text" v-model="header.name" v-title-desc placeholder="please input header name"/>
                             </div>
                             <div class="flex-item param-field param-field-input">
-                                <input type="text" v-model="param.value" v-title-desc placeholder="please input param value"/>
+                                <input type="text" v-model="header.value" v-title-desc placeholder="please input header value"/>
                             </div>
                             <div class="param-field param-field-opt">
-
-                                <button v-if="selection.contentType.name==='Multipart'" v-file-select class="glyphicon glyphicon-open" title="upload file">
-                                    <input class="file-input" type="file" />
-                                </button>
-                                <button v-on:click="addParam(param)" class="glyphicon glyphicon-plus" title="add a param after this one"></button>
-                                <button v-on:click="removeParam(param)" class="glyphicon glyphicon-minus" title="remove this param"></button>
+                                <button v-on:click="addHeader(header)" class="glyphicon glyphicon-plus" title="add a param after this one"></button>
+                                <button v-on:click="removeHeader(header)" class="glyphicon glyphicon-minus" title="remove this param"></button>
                             </div>
                         </div>
                     </div>
-
                 </div>
-            </div>
 
-            <div class="flex flex-column flex-item" v-if="selection.tabState==='Headers'">
-                <div class="flex-item">
-                    <div v-if="selection.headers.length===0" class="height100 flex flex-v-center flex-h-center">
-                        <button v-on:click="addHeader()" class="add-param-btn btn btn-success glyphicon glyphicon-plus"></button>
-                    </div>
-                    <div v-for="header in selection.headers" class="flex c-row-param c-row-layout">
-                        <div class="param-field param-field-name">
-                            <input type="text" v-model="header.name" v-title-desc placeholder="please input header name"/>
+                <div class="flex-item" v-if="selection.tabState==='Cookies'">
+                    <div class="content-panel">
+                        <div v-if="selection.cookies.length===0" class="height100 flex flex-v-center flex-h-center">
+                            <button v-on:click="addItem(selection.cookies)" class="add-param-btn btn btn-success glyphicon glyphicon-plus"></button>
                         </div>
-                        <div class="flex-item param-field param-field-input">
-                            <input type="text" v-model="header.value" v-title-desc placeholder="please input header value"/>
-                        </div>
-                        <div class="param-field param-field-opt">
-                            <button v-on:click="addHeader(header)" class="glyphicon glyphicon-plus" title="add a param after this one"></button>
-                            <button v-on:click="removeHeader(header)" class="glyphicon glyphicon-minus" title="remove this param"></button>
+                        <div v-for="cookie in selection.cookies" class="flex c-row-param c-row-layout">
+                            <div class="param-field param-field-input">
+                                <input type="text" v-model="cookie.name" title="please input cookie name" placeholder="name"/>
+                            </div>
+                            <div class="flex-item param-field param-field-input">
+                                <input type="text" v-model="cookie.value" title="please input cookie value" placeholder="value"/>
+                            </div>
+                            <div class="flex-item param-field param-field-input">
+                                <input type="text" v-model="cookie.domain" title="please input cookie domain" placeholder="domain"/>
+                            </div>
+                            <div class="flex-item param-field param-field-input">
+                                <input type="text" v-model="cookie.path" title="please input cookie path" placeholder="path"/>
+                            </div>
+                            <div class="param-field param-field-opt">
+                                <button v-on:click="addItem(selection.cookies,cookie)" class="glyphicon glyphicon-plus" title="add a param after this one"></button>
+                                <button v-on:click="removeItem(selection.cookies,cookie)" class="glyphicon glyphicon-minus" title="remove this param"></button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="flex flex-column flex-item" v-if="selection.tabState==='Cookies'">
-                <div v-if="selection.cookies.length===0" class="height100 flex flex-v-center flex-h-center">
-                    <button v-on:click="addItem(selection.cookies)" class="add-param-btn btn btn-success glyphicon glyphicon-plus"></button>
-                </div>
-                <div v-for="cookie in selection.cookies" class="flex c-row-param c-row-layout">
-                    <div class="param-field param-field-input">
-                        <input type="text" v-model="cookie.name" title="please input cookie name" placeholder="name"/>
+            <div class="flex flex-column flex-item panel panel-success panel-response" key="panel-response">
+                <header class="panel-heading">
+                    <div v-bind:class="{ 'tab-active': response.tabState===tab}" v-for="tab in response.tabs" class="flex flex-h-center flex-v-center header-tab button"
+                         v-on:click="response.setTabState(tab)">
+                        {{tab}}
                     </div>
-                    <div class="flex-item param-field param-field-input">
-                        <input type="text" v-model="cookie.value" title="please input cookie value" placeholder="value"/>
-                    </div>
-                    <div class="flex-item param-field param-field-input">
-                        <input type="text" v-model="cookie.domain" title="please input cookie domain" placeholder="domain"/>
-                    </div>
-                    <div class="flex-item param-field param-field-input">
-                        <input type="text" v-model="cookie.path" title="please input cookie path" placeholder="path"/>
-                    </div>
-                    <div class="param-field param-field-opt">
-                        <button v-on:click="addItem(selection.cookies,cookie)" class="glyphicon glyphicon-plus" title="add a param after this one"></button>
-                        <button v-on:click="removeItem(selection.cookies,cookie)" class="glyphicon glyphicon-minus" title="remove this param"></button>
+                </header>
+                <div v-if="response.tabState==='Body'"  class="flex-item">
+                    <div class="content-panel">
+                        {{response.text}}
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <div class="flex flex-item flex-column panel panel-success">
-            <header class="panel-heading">
-                <div v-bind:class="{ 'tab-active': response.tabState===tab}" v-for="tab in response.tabs" class="flex flex-h-center flex-v-center header-tab" v-on:click="response.setTabState(tab)">
-                    {{tab}}
-                </div>
-            </header>
-            <div v-if="response.tabState==='Body'"  class="flex-item">
-                {{response.text}}
-            </div>
-            <div v-if="response.tabState==='Headers'"  class="flex-item">
-                <div v-for="header in response.headers" class="flex c-row-param c-row-layout">
-                    <div class="flex flex-v-center param-field param-field-name">
-                        {{header.name}}
-                    </div>
-                    <div class="param-field param-field-split flex flex-v-center">:</div>
-                    <div class="flex-item param-field param-field-input param-field-text">
-                        {{header.value}}
+                <div v-if="response.tabState==='Headers'"  class="flex-item">
+                    <div class="content-panel">
+                        <div v-for="header in response.headers" class="flex c-row-param c-row-layout">
+                            <div class="flex flex-v-center param-field param-field-name">
+                                {{header.name}}
+                            </div>
+                            <div class="param-field param-field-split flex flex-v-center">:</div>
+                            <div class="flex-item param-field param-field-input param-field-text">
+                                {{header.value}}
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div v-if="response.tabState==='Cookies'"  class="flex-item">
-                <div v-for="cookie in response.cookies" class="flex c-row-param c-row-layout">
-                    <div class="flex flex-v-center param-field param-field-name">
-                        {{cookie.name}}
-                    </div>
-                    <div class="param-field param-field-split flex flex-v-center">:</div>
-                    <div class="flex-item param-field param-field-input param-field-text">
-                        {{cookie.value}}
+                <div v-if="response.tabState==='Cookies'"  class="flex-item">
+                    <div class="content-panel">
+                        <div v-for="cookie in response.cookies" class="flex c-row-param c-row-layout">
+                            <div class="flex flex-v-center param-field param-field-name">
+                                {{cookie.name}}
+                            </div>
+                            <div class="param-field param-field-split flex flex-v-center">:</div>
+                            <div class="flex-item param-field param-field-input param-field-text">
+                                {{cookie.value}}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

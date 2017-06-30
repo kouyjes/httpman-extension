@@ -1,15 +1,16 @@
 *::-webkit-scrollbar-track {
   background-color: transparent; }
 *::-webkit-scrollbar {
-  width: 14px;
-  height: 14px;
+  width: 11px;
+  height: 11px;
   padding-left: 2px;
-  background-color: #daf3ef; }
+  background-color: #daf3ef;
+  border-radius: .5em; }
 *::-webkit-scrollbar-thumb {
   background-clip: padding-box;
-  border: 3px solid rgba(255, 255, 255, 0);
+  border: 1px solid rgba(255, 255, 255, 0);
   background-color: rgba(173, 164, 164, 0.8);
-  border-radius: 8px; }
+  border-radius: .5em; }
 
 html, body {
   margin: 0;
@@ -18,28 +19,46 @@ html, body {
   height: 100%;
   overflow: auto; }
 
+body {
+  border-top: 1px solid #ccc; }
+  body .button, body button {
+    -webkit-user-select: none; }
+
 #app {
   width: 100%;
   height: 100%;
-  min-height: 680px;
   overflow: hidden;
   display: flex;
-  flex-direction: column; }
+  flex-direction: column;
+  animation: app-show .8s; }
+  #app .panel-request {
+    height: 50%;
+    min-height: 300px; }
+  #app .panel-request .json-editor {
+    position: relative; }
+    #app .panel-request .json-editor > div {
+      position: absolute;
+      top: 10px;
+      bottom: 10px;
+      left: 10px;
+      right: 10px; }
+@keyframes app-show {
+  from {
+    opacity: 0; }
+  to {
+    opacity: 1; } }
   #app .jsoneditor-poweredBy {
     display: none; }
   #app textarea, #app input {
     outline: none; }
-  #app textarea {
-    resize: none;
-    width: 100%;
-    height: 50px; }
   #app input {
     border: 1px solid #ccc;
     text-indent: 8px; }
   #app .file-input {
     display: none; }
   #app .basic-info {
-    height: 55px; }
+    height: 55px;
+    padding-top: 10px; }
     #app .basic-info input {
       height: 34px;
       width: 100%;
@@ -62,9 +81,12 @@ html, body {
       #app .basic-info .http-method .dropdown-menu {
         width: 100%;
         border-radius: 0; }
+  #app > .flex-item {
+    overflow: auto; }
   #app .flex {
     display: flex;
-    margin: 0; }
+    margin: 0;
+    position: relative; }
   #app .flex-v-center {
     align-items: center; }
   #app .flex-h-center {
@@ -74,7 +96,8 @@ html, body {
   #app .flex-row {
     flex-direction: row; }
   #app .flex-item {
-    flex: 1; }
+    flex: 1;
+    position: relative; }
   #app .float-left {
     float: left; }
   #app .layout-option {
@@ -86,6 +109,8 @@ html, body {
   #app .tab-active {
     background-color: #c3e2e6;
     border-radius: 2px; }
+  #app .content-type {
+    background-color: #86b1ca; }
   #app .panel {
     border-radius: 0 !important; }
     #app .panel .panel-heading {
@@ -100,12 +125,15 @@ html, body {
         padding: 4px 0;
         float: left;
         cursor: pointer; }
-    #app .panel > div:last-child {
-      display: flex;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      flex-direction: column; }
+        #app .panel .panel-heading .header-tab:active {
+          background-color: #bbd8d8; }
+    #app .panel .content-panel {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      overflow: auto; }
   #app .c-row-layout {
     padding: 5px; }
   #app .c-row {

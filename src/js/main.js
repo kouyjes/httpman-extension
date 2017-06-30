@@ -58,6 +58,7 @@ $(function () {
                 var selection = this.selection;
                 var _ = this;
                 _.status.loading = true;
+                _.response.reset();
                 selection.send().then(function (result) {
                     var data = result[0],xhr = result[2];
                     _.response.headers = [];
@@ -79,14 +80,19 @@ $(function () {
                     }
                     _.response.text = JSON.stringify(data);
                     JsRuntime.getAllCookies(_.selection.url).then(function (cookies) {
-                        _.response.cookies = cookies.map(function (cookie) {
-                            return {
+                        var _cookies = [];
+                         cookies.map(function (cookie) {
+                             if(!cookie.name){
+                                 return;
+                             }
+                             _cookies.push({
                                 name:cookie.name,
                                 value:cookie.value,
                                 path:cookie.path,
                                 domain:cookie.domain
-                            };
+                            });
                         });
+                        _.response.cookies = _cookies;
                     });
                 });
 

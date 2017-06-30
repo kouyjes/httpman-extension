@@ -17,9 +17,6 @@ function createPanel(){
     }else if (opened === true) {
         chrome.windows.update(panel, {focused: true});
     }
-    setTimeout(function () {
-        chrome.windows.update(panel, {width: 1200});
-    },2000);
 }
 
 function removePanel(windowId){

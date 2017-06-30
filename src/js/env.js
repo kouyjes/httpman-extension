@@ -210,6 +210,10 @@ JsRuntime.getAbsoluteUrl = function (url) {
 };
 JsRuntime.setCookie = function (url,cookie) {
     return new Promise(function (resolve) {
+        if(!cookie.name){
+            resolve(cookie);
+            return;
+        }
         chrome.cookies.set({
             url:url,
             name:cookie.name,

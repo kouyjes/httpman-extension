@@ -6,21 +6,23 @@
   }
   &::-webkit-scrollbar
   {
-    $size:14px;
+    $size:11px;
     width:$size;
     height:$size;
     padding-left: 2px;
     background-color: rgb(218, 243, 239);
+    border-radius:.5em;
   }
   &::-webkit-scrollbar-thumb
   {
     background-clip: padding-box;
-    border: 3px solid rgba(255, 255, 255, 0);
+    border: 1px solid rgba(255, 255, 255, 0);
     background-color: rgba(173, 164, 164, 0.8);
-    border-radius: 8px;
+    border-radius: .5em;
   }
 }
 $inputBorderColor:#ccc;
+$margin:10px;
 html,body{
   margin:0;
   padding:0;
@@ -28,23 +30,52 @@ html,body{
   height:100%;
   overflow:auto;
 }
+body{
+  border-top:1px solid #ccc;
+  .button,button{
+    -webkit-user-select: none;
+  }
+
+}
 #app{
   width:100%;
   height:100%;
-  min-height:680px;
   overflow:hidden;
   display:flex;
   flex-direction: column;
+  .panel-request{
+    height:50%;
+    min-height:300px;
+  }
+  .panel-response{
+
+  }
+  .panel-request{
+    .json-editor{
+      position:relative;
+      >div{
+        position: absolute;
+        top:$margin;
+        bottom:$margin;
+        left:$margin;
+        right:$margin;
+      }
+    }
+  }
+  @keyframes app-show {
+    from{
+      opacity:0;
+    }
+    to{
+      opacity: 1;
+    }
+  }
+  animation: app-show .8s;
   .jsoneditor-poweredBy{
     display:none;
   }
   textarea,input{
     outline:none;
-  }
-  textarea{
-    resize: none;
-    width:100%;
-    height:50px;
   }
   input{
     border: 1px solid $inputBorderColor;
@@ -55,6 +86,7 @@ html,body{
   }
   .basic-info{
     height:55px;
+    padding-top:10px;
     input{
       height:34px;
       width:100%;
@@ -86,9 +118,13 @@ html,body{
       }
     }
   }
+  >.flex-item{
+    overflow:auto;
+  }
   .flex{
     display:flex;
     margin:0;
+    position: relative;
   }
   .flex-v-center{
     align-items: center;
@@ -104,6 +140,7 @@ html,body{
   }
   .flex-item{
     flex:1;
+    position: relative;
   }
   .float-left{
     float:left;
@@ -121,6 +158,9 @@ html,body{
     background-color: #c3e2e6;
     border-radius: 2px;
   }
+  .content-type{
+    background-color:#86b1ca;
+  }
   .panel{
     border-radius:0 !important;
     .panel-heading{
@@ -135,16 +175,18 @@ html,body{
         padding:4px 0;
         float:left;
         cursor:pointer;
+        &:active{
+          background-color:#bbd8d8;
+        }
       }
     }
-    >div{
-      &:last-child{
-        display:flex;
-        width:100%;
-        height:100%;
-        overflow:auto;
-        flex-direction: column;
-      }
+    .content-panel{
+      position: absolute;
+      left:0;
+      right:0;
+      top:0;
+      bottom:0;
+      overflow:auto;
     }
   }
   .c-row-layout{
