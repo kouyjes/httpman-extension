@@ -5,6 +5,8 @@
     <title>httpman</title>
     <link href="../vendor/bootstrap/dist/css/bootstrap.css" rel="stylesheet" type="text/css">
     <link href="../vendor/jsoneditor/dist/jsoneditor.css" rel="stylesheet" type="text/css">
+    <link href="../css/loading.css" rel="stylesheet" type="text/css">
+    <link href="../css/component.css" rel="stylesheet" type="text/css">
     <link href="../css/main.css" rel="stylesheet" type="text/css">
     <script src="../vendor/jsoneditor/dist/jsoneditor.js"></script>
     <script src="../vendor/jquery/dist/jquery.js"></script>
@@ -13,10 +15,11 @@
     <script src="../js/env.js"></script>
     <script src="../js/http.js"></script>
     <script src="../js/directive.js"></script>
+    <script src="../js/component.js"></script>
     <script src="../js/main.js"></script>
 </head>
 <body>
-    <div id="app" class="flex flex-column">
+    <div v-cloak id="app" class="flex flex-column">
         <div class="basic-info">
             <div class="c-row flex flex-row c-row-layout">
                 <div class="c-row-title">
@@ -143,14 +146,19 @@
 
             <div class="flex flex-column flex-item panel panel-success panel-response" key="panel-response">
                 <header class="panel-heading">
-                    <div v-bind:class="{ 'tab-active': response.tabState===tab}" v-for="tab in response.tabs" class="flex flex-h-center flex-v-center header-tab button"
+                    <div v-bind:class="{ 'tab-active': response.tabState===tab}" v-for="tab in response.tabs.concat('Abstract')" class="flex flex-h-center flex-v-center header-tab button"
                          v-on:click="response.setTabState(tab)">
                         {{tab}}
+                    </div>
+
+                    <div class="loading-state flex flex-v-center">
+                        <loading-circle  v-if="status.loading">
+                        </loading-circle>
                     </div>
                 </header>
                 <div v-if="response.tabState==='Body'"  class="flex-item">
                     <div class="content-panel">
-                        {{response.text}}
+                        <response-view v-bind:response="response"></response-view>
                     </div>
                 </div>
                 <div v-if="response.tabState==='Headers'"  class="flex-item">
@@ -175,6 +183,19 @@
                             <div class="param-field param-field-split flex flex-v-center">:</div>
                             <div class="flex-item param-field param-field-input param-field-text">
                                 {{cookie.value}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="response.tabState==='Abstract'"  class="flex-item">
+                    <div class="content-panel">
+                        <div v-if="value" v-for="(value,key) in response.abstract" class="flex c-row-param c-row-layout">
+                            <div class="flex flex-v-center param-field param-field-name">
+                                {{key}}
+                            </div>
+                            <div class="param-field param-field-split flex flex-v-center">:</div>
+                            <div class="flex-item param-field param-field-input param-field-text">
+                                {{value}}
                             </div>
                         </div>
                     </div>

@@ -37,12 +37,21 @@ body{
   }
 
 }
+[v-cloak]{
+  display:none !important;
+}
 #app{
   width:100%;
   height:100%;
   overflow:hidden;
   display:flex;
   flex-direction: column;
+  .loading-state{
+    float:right;
+    height:100%;
+    padding-right:10px;
+    white-space: nowrap;
+  }
   .panel-request{
     height:50%;
     min-height:300px;
@@ -70,7 +79,9 @@ body{
       opacity: 1;
     }
   }
-  animation: app-show .8s;
+  &:not([v-cloak]){
+    animation: app-show .8s;
+  }
   .jsoneditor-poweredBy{
     display:none;
   }
@@ -168,6 +179,7 @@ body{
       padding:0;
       border-radius: 0 !important;
       overflow:hidden;
+      height:41px;
       .header-tab{
         height:40px;
         width:100px;
@@ -230,6 +242,8 @@ body{
       }
       &.param-field-name{
         width:200px;
+        font-weight: bold;
+        background-color:#dedddd;
       }
       &.param-field-opt{
         width:120px;

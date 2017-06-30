@@ -238,7 +238,7 @@ JsRuntime.getAllCookies = function (url) {
         chrome.cookies.getAll({
             url:url
         }, function (cookies) {
-            resolve(cookies);
+            resolve(cookies || []);
         });
     });
 };

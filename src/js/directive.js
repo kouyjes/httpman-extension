@@ -46,7 +46,21 @@
             }
         }
     };
+    var iframeHtml = {
+        _update: function (el,binding) {
+            var doc = el.contentWindow.document;
+            doc.open();
+            doc.write(binding.value);
+        },
+        inserted: function (el,binding) {
+            iframeHtml._update.apply(this,arguments);
+        },
+        update: function (el,binding) {
+            iframeHtml._update.apply(this,arguments);
+        }
+    };
     Vue.directive('json-editor',jsonEditor);
     Vue.directive('file-select',fileSelect);
     Vue.directive('title-desc',titleDesc);
+    Vue.directive('iframe-html',iframeHtml);
 })(Vue);

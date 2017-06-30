@@ -12,6 +12,12 @@ var BaseHttp = (function () {
     return BaseHttp;
 })();
 var HttpResponse = (function () {
+    var _id = function () {
+        var id = 1;
+        return function () {
+            return id++;
+        }
+    };
     function HttpResponse(response){
         BaseHttp.apply(this,arguments);
         this.init();
@@ -21,9 +27,66 @@ var HttpResponse = (function () {
     }
     HttpResponse.prototype = Object.create(BaseHttp.prototype);
     HttpResponse.prototype.init = function () {
+        this.token = _id();
         this.text = '';
         this.headers = [];
         this.cookies = [];
+        this.abstract = {
+            statusCode:undefined,
+            statusText:undefined,
+            cost:undefined
+        };
+    };
+    HttpResponse.prototype.fill = function (option) {
+        if(option.token !== this.token){
+            return;
+        }
+        var _ = this;
+        var data = option.data,request = option.request,xhr = option.xhr,
+            startTime = option.startTime,endTime = option.endTime;
+        var url = request.url;
+        var _headers = [];
+        var headerString = xhr.getAllResponseHeaders();
+        if(headerString){
+            headerString.split(/\n/).forEach(function (str) {
+                str = str.trim();
+                if(!str){
+                    return;
+                }
+                var index = str.indexOf(':');
+                var name = str.slice(0,index);
+                var value = str.slice(index + 1);
+                _headers.push({
+                    name:name,
+                    value:value
+                });
+            });
+        }
+
+        JsRuntime.getAllCookies(url).then(function (cookies) {
+            var _cookies = [];
+            cookies.map(function (cookie) {
+                if (!cookie.name) {
+                    return;
+                }
+                _cookies.push({
+                    name: cookie.name,
+                    value: cookie.value,
+                    path: cookie.path,
+                    domain: cookie.domain
+                });
+            });
+
+            _.text = JSON.stringify(data);
+            _.cookies = _cookies;
+            _.headers = _headers;
+
+            _.abstract = {
+                statusCode:xhr.status,
+                statusText:xhr.statusText,
+                cost:(endTime - startTime) + 'ms'
+            };
+        });
     };
     HttpResponse.prototype.reset = function () {
         this.resetTabState();
