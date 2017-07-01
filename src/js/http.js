@@ -187,10 +187,10 @@ var HttpRequest = (function () {
                     return;
                 }
                 var value = this.body.object[key];
-                if(typeof value === 'string'){
+                if(['string','number','boolean'].indexOf(typeof value) >= 0){
                     this.body.params.push({
                         name:key,
-                        value:value
+                        value:'' + value
                     });
                 }
             }.bind(this));

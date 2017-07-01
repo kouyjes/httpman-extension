@@ -8,9 +8,13 @@
                     return true;
                 },
                 onChange: function () {
+                    var object = null;
                     try{
-                        binding.value = el.editor.get();
+                       object = el.editor.get();
                     }catch(e){}
+                    if(object){
+                        binding.value.object = object;
+                    }
 
                 },
                 onError: function (err) {
@@ -20,7 +24,7 @@
 
                 }
             };
-            el.editor = new JSONEditor(el, options,binding.value);
+            el.editor = new JSONEditor(el, options,binding.value.object);
         }
     };
     var titleDesc = {

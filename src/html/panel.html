@@ -64,7 +64,7 @@
                     </div>
 
                     <div class="flex-item c-row c-row-layout json-editor" key="json-editor" v-if="selection.contentType.name==='Json'">
-                        <div  v-json-editor="selection.body.object" ></div>
+                        <div  v-json-editor="selection.body" ></div>
                     </div>
 
                     <div class="flex flex-column flex-item c-row c-row-layout" key="param-editor" v-if="selection.contentType.name!=='Json'">
