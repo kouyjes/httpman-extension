@@ -88,6 +88,7 @@ $(function () {
                         resultOption.xhr = result[0];
                         resultOption.endTime = new Date();
                         _.response.fill(resultOption);
+                        _.response.tabState = 'Console';
                     });
 
                 }

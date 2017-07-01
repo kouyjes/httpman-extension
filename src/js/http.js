@@ -14,6 +14,7 @@ var BaseHttp = (function () {
 var HttpResponse = (function () {
     function HttpResponse(response){
         BaseHttp.apply(this,arguments);
+        this.tabs = this.tabs.concat('Console');
         this.init();
         if(response){
             Object.assign(this,response);

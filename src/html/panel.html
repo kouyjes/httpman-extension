@@ -144,7 +144,7 @@
 
             <div class="flex flex-column flex-item panel panel-success panel-response" key="panel-response">
                 <header class="panel-heading">
-                    <div v-bind:class="{ 'tab-active': response.tabState===tab}" v-for="tab in response.tabs.concat('Abstract')" class="flex flex-h-center flex-v-center header-tab button"
+                    <div v-bind:class="{ 'tab-active': response.tabState===tab}" v-for="tab in response.tabs" class="flex flex-h-center flex-v-center header-tab button"
                          v-on:click="response.setTabState(tab)">
                         {{tab}}
                     </div>
@@ -185,7 +185,7 @@
                         </div>
                     </div>
                 </div>
-                <div v-if="response.tabState==='Abstract'"  class="flex-item">
+                <div v-if="response.tabState==='Console'"  class="flex-item">
                     <div class="content-panel">
                         <div v-if="value" v-for="(value,key) in response.abstract" class="flex c-row-param c-row-layout">
                             <div class="flex flex-v-center param-field param-field-name param-field-text flex flex-v-center">
