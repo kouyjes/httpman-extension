@@ -190,7 +190,8 @@ body {
         width: 200px;
         font-weight: bold; }
       #app .c-row-param > .param-field.param-field-opt {
-        width: 120px; }
+        width: 120px;
+        text-align: center; }
       #app .c-row-param > .param-field.param-field-split {
         width: 30px; }
       #app .c-row-param > .param-field.param-field-input {
