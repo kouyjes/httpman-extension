@@ -46,7 +46,10 @@ var test = [];
     };
     var responseView = {
         template: '#response-view',
-        props: ['response']
+        props: ['response'],
+        methods:{
+
+        }
     };
     var fileComp = {
         template: '#file-upload',

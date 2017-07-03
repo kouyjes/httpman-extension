@@ -9,6 +9,7 @@
         var url = request.url;
         var _headers = [];
         var headerString = xhr.getAllResponseHeaders();
+        var contentTypeValue = null;
         if (headerString) {
             headerString.split(/\n/).forEach(function (str) {
                 str = str.trim();
@@ -17,13 +18,25 @@
                 }
                 var index = str.indexOf(':');
                 var name = str.slice(0, index);
+                name = name.trim();
                 var value = str.slice(index + 1);
                 _headers.push({
                     name: name,
                     value: value
                 });
+                name = name.toLowerCase();
+                if(name === 'content-type'){
+                    contentTypeValue = value.trim();
+                }
             });
         }
+
+        HttpResponse.contentTypes.some(function (type) {
+            if(type.value === contentTypeValue){
+                this.contentType = type;
+                return true;
+            }
+        }.bind(this));
 
         JsRuntime.getAllCookies(url).then(function (cookies) {
             var _cookies = [];

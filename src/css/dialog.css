@@ -1,0 +1,11 @@
+@keyframes error {
+  from {
+    opacity: 0; }
+  to {
+    opacity: 1; } }
+.dialog.error {
+  position: fixed;
+  z-index: 100;
+  animate: error .8s; }
+
+/*# sourceMappingURL=dialog.css.map */

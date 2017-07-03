@@ -3,7 +3,26 @@ var BaseHttp = (function () {
         this.tabs = ['Body', 'Headers', 'Cookies'];
         this.tabState = baseHttp && baseHttp.tabState ? baseHttp.tabState : this.tabs[0];
     }
-
+    BaseHttp.config = {
+        methods: ['GET', 'POST', 'UPDATE', 'PUT', 'DELETE', 'OPTION'],
+        contentTypes: [
+            {
+                name: 'Json',
+                caption: 'Json',
+                value: 'application/json'
+            },
+            {
+                name: 'Urlencoded',
+                caption: 'Urlencoded',
+                value: 'application/x-www-form-urlencoded'
+            },
+            {
+                name: 'Multipart',
+                caption: 'Multipart',
+                value: 'multipart/form-data'
+            }
+        ]
+    };
     BaseHttp.prototype.setTabState = function (tab) {
         this.tabState = tab;
     };
@@ -13,6 +32,16 @@ var BaseHttp = (function () {
     return BaseHttp;
 })();
 var HttpResponse = (function () {
+    var responseContentTypes = [
+        {
+            name:'text',
+            value:'application/text'
+        },
+        {
+            name:'Json',
+            value:'application/json'
+        }
+    ];
     function HttpResponse(response) {
         BaseHttp.apply(this, arguments);
         this.tabs = this.tabs.concat('Console');
@@ -21,10 +50,11 @@ var HttpResponse = (function () {
             Object.assign(this, response);
         }
     }
-
+    HttpResponse.contentTypes = responseContentTypes;
     HttpResponse.prototype = Object.create(BaseHttp.prototype);
     HttpResponse.prototype.init = function () {
         this.token = JsRuntime.getId();
+        this.contentType = HttpResponse.contentTypes[0];
         this.text = '';
         this.headers = [];
         this.cookies = [];
@@ -53,26 +83,6 @@ var HttpHeaders = (function () {
     return HttpHeaders;
 })();
 var HttpRequest = (function () {
-    HttpRequest.config = {
-        methods: ['GET', 'POST', 'UPDATE', 'PUT', 'DELETE', 'OPTION'],
-        contentTypes: [
-            {
-                name: 'Json',
-                caption: 'Json',
-                value: 'application/json'
-            },
-            {
-                name: 'Urlencoded',
-                caption: 'Urlencoded',
-                value: 'application/x-www-form-urlencoded'
-            },
-            {
-                name: 'Multipart',
-                caption: 'Multipart',
-                value: 'multipart/form-data'
-            }
-        ]
-    };
     function HttpRequestBody(body) {
         this.object = {};
         this.params = [];
@@ -104,11 +114,11 @@ var HttpRequest = (function () {
     function HttpRequest(httpRequest) {
 
         BaseHttp.apply(this, arguments);
-        this.method = HttpRequest.config.methods[0];
+        this.method = BaseHttp.config.methods[0];
         this.url = '';
         this.headers = [];
         this.cookies = [];
-        this.contentType = HttpRequest.config.contentTypes[0];
+        this.contentType = BaseHttp.config.contentTypes[0];
         this.body = new HttpRequestBody();
 
         if (httpRequest) {
@@ -120,6 +130,18 @@ var HttpRequest = (function () {
     }
 
     HttpRequest.prototype = Object.create(BaseHttp.prototype);
+    HttpRequest.prototype.check = function () {
+        var urlReg = /^https?:\/{2}\w+.*/;
+        if(!urlReg.test(this.url)){
+            return {
+                result:false,
+                message:'Request url is invalid !'
+            };
+        }
+        return {
+            result:true
+        };
+    };
     HttpRequest.serializeArray = function (params) {
         var paramStrings = [];
         params.forEach(function (param) {

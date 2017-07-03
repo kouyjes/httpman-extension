@@ -2,13 +2,13 @@ $(function () {
     $.get('component.html').then(function (html) {
         $(document.body).append(html);
         initApp();
-
     });
     function initApp() {
+
         var mainApp = new Vue({
             el: '#app',
             data: {
-                config: HttpRequest.config,
+                config: BaseHttp.config,
                 status: {
                     loading: false
                 },
@@ -71,8 +71,16 @@ $(function () {
                 send: function () {
                     var selection = this.selection;
                     var _ = this;
-                    _.status.loading = true;
                     _.response.reset();
+
+                    var checkResult = selection.check();
+                    if(!checkResult.result){
+                        _.response.abstract.statusText = checkResult.message;
+                        _.response.tabState = 'Console';
+                        return;
+                    }
+
+                    _.status.loading = true;
                     var resultOption = {
                         token: _.response.token,
                         request: selection,

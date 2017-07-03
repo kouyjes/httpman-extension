@@ -48,7 +48,16 @@
             iframeHtml._update.apply(this, arguments);
         }
     };
+    var jsonViewer = {
+        inserted: function (el, binding) {
+            $(el).jsonview(binding.value);
+        },
+        update: function (el, binding) {
+            $(el).jsonview(binding.value);
+        }
+    };
     Vue.directive('json-editor', jsonEditor);
     Vue.directive('title-desc', titleDesc);
     Vue.directive('iframe-html', iframeHtml);
+    Vue.directive('json-viewer', jsonViewer);
 })(Vue);

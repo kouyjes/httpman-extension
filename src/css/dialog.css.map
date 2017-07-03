@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AACE,gBAOC;EANC,IAAI;IACF,OAAO,EAAE,CAAC;EAEZ,EAAE;IACA,OAAO,EAAE,CAAC;AAGd,aAAO;EACL,QAAQ,EAAE,KAAK;EACf,OAAO,EAAC,GAAG;EACX,OAAO,EAAC,SAAS",
+"sources": ["dialog.scss"],
+"names": [],
+"file": "dialog.css"
+}

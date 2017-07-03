@@ -1,0 +1,15 @@
+.dialog{
+  @keyframes error {
+    from{
+      opacity: 0;
+    }
+    to{
+      opacity: 1;
+    }
+  }
+  &.error{
+    position: fixed;
+    z-index:100;
+    animate:error .8s;
+  }
+}

@@ -5,11 +5,13 @@
     <title>httpman</title>
     <link href="../vendor/bootstrap/dist/css/bootstrap.css" rel="stylesheet" type="text/css">
     <link href="../vendor/jsoneditor/dist/jsoneditor.css" rel="stylesheet" type="text/css">
+    <link href="../vendor/json-viewer/json-viewer.css" rel="stylesheet" type="text/css">
     <link href="../css/loading.css" rel="stylesheet" type="text/css">
     <link href="../css/component.css" rel="stylesheet" type="text/css">
     <link href="../css/main.css" rel="stylesheet" type="text/css">
-    <script src="../vendor/jsoneditor/dist/jsoneditor.js"></script>
     <script src="../vendor/jquery/dist/jquery.js"></script>
+    <script src="../vendor/jsoneditor/dist/jsoneditor.js"></script>
+    <script src="../vendor/json-viewer/json-viewer.js"></script>
     <script src="../vendor/bootstrap/dist/js/bootstrap.js"></script>
     <script src="../vendor/vue/dist/vue.js"></script>
     <script src="../js/env-extension.js"></script>
@@ -38,7 +40,7 @@
                 </div>
             </div>
             <div class="c-row-input flex-item">
-                <input v-model="selection.url"/>
+                <input spellcheck="false" v-model="selection.url"/>
             </div>
             <div class="c-row-title">
                 <button v-on:click="send()" class="btn btn-primary">
@@ -81,13 +83,13 @@
                             </div>
                             <div v-for="(param,index) in selection.body.params" class="flex c-row-param c-row-layout">
                                 <div class="param-field param-field-name">
-                                    <input type="text" v-model="param.name" v-title-desc
+                                    <input spellcheck="false" type="text" v-model="param.name" v-title-desc
                                            placeholder="please input param name"/>
                                 </div>
                                 <div class="flex-item param-field param-field-input">
-                                    <input v-if="param.type!=='file'" type="text" v-model="param.value" v-title-desc
+                                    <input spellcheck="false" v-if="param.type!=='file'" type="text" v-model="param.value" v-title-desc
                                            placeholder="please input param value"/>
-                                    <input readonly v-if="param.type==='file'" type="text" v-bind:value="param.caption"
+                                    <input spellcheck="false" readonly v-if="param.type==='file'" type="text" v-bind:value="param.caption"
                                            v-title-desc/>
                                 </div>
                                 <div class="param-field param-field-opt">
@@ -116,11 +118,11 @@
                     </div>
                     <div v-for="header in selection.headers" class="flex c-row-param c-row-layout">
                         <div class="param-field param-field-name">
-                            <input type="text" v-model="header.name" v-title-desc
+                            <input spellcheck="false" type="text" v-model="header.name" v-title-desc
                                    placeholder="please input header name"/>
                         </div>
                         <div class="flex-item param-field param-field-input">
-                            <input type="text" v-model="header.value" v-title-desc
+                            <input spellcheck="false" type="text" v-model="header.value" v-title-desc
                                    placeholder="please input header value"/>
                         </div>
                         <div class="param-field param-field-opt">
@@ -141,19 +143,19 @@
                     </div>
                     <div v-for="cookie in selection.cookies" class="flex c-row-param c-row-layout">
                         <div class="param-field param-field-input">
-                            <input type="text" v-model="cookie.name" title="please input cookie name"
+                            <input spellcheck="false" type="text" v-model="cookie.name" title="please input cookie name"
                                    placeholder="name"/>
                         </div>
                         <div class="flex-item param-field param-field-input">
-                            <input type="text" v-model="cookie.value" title="please input cookie value"
+                            <input spellcheck="false" type="text" v-model="cookie.value" title="please input cookie value"
                                    placeholder="value"/>
                         </div>
                         <div class="flex-item param-field param-field-input">
-                            <input type="text" v-model="cookie.domain" title="please input cookie domain"
+                            <input spellcheck="false" type="text" v-model="cookie.domain" title="please input cookie domain"
                                    placeholder="domain"/>
                         </div>
                         <div class="flex-item param-field param-field-input">
-                            <input type="text" v-model="cookie.path" title="please input cookie path"
+                            <input spellcheck="false" type="text" v-model="cookie.path" title="please input cookie path"
                                    placeholder="path"/>
                         </div>
                         <div class="param-field param-field-opt">
