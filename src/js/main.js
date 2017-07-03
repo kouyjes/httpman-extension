@@ -2,6 +2,7 @@ $(function () {
     $.get('component.html').then(function (html) {
         $(document.body).append(html);
         initApp();
+
     });
     function initApp(){
         var mainApp = new Vue({
