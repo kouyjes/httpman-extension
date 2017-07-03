@@ -1,15 +1,15 @@
-angular.module('panel').service('IndexDBService',['$q',function ($q) {
+angular.module('panel').service('IndexDBService', ['$q', function ($q) {
     this.db = null;
     this.isEnabled = function () {
         return typeof window.indexedDB !== 'undefined';
     };
-    this.open = function (name,keys) {
+    this.open = function (name, keys) {
         var defer = $q.defer();
-        if(this.db){
+        if (this.db) {
             defer.resolve(this.db);
             return defer.promise;
         }
-        try{
+        try {
             var req = window.indexedDB.open(name);
             req.onsuccess = function () {
                 this.db = req.result;
@@ -20,37 +20,37 @@ angular.module('panel').service('IndexDBService',['$q',function ($q) {
             };
             req.onupgradeneeded = function (e) {
                 var db = e.target.result;
-                if(keys){
+                if (keys) {
                     keys.forEach(function (key) {
-                        if(!db.objectStoreNames.contains(key)){
-                            db.createObjectStore(key,{autoIncrement:true});
+                        if (!db.objectStoreNames.contains(key)) {
+                            db.createObjectStore(key, {autoIncrement: true});
                         }
                     });
                 }
             };
-        }catch (e){
+        } catch (e) {
             defer.reject(e);
         }
         return defer.promise;
     };
     this.close = function () {
-        if(null != this.db){
+        if (null != this.db) {
             this.db.close();
             this.db = null;
         }
     };
     this.deleteDB = function (dbName) {
-        if(this.db){
+        if (this.db) {
             this.close();
         }
         window.indexedDB.deleteDatabase(dbName);
     };
-    this.addItem = function (key,item) {
+    this.addItem = function (key, item) {
         return add(this.db);
-        function add(db){
+        function add(db) {
             var defer = $q.defer();
-            try{
-                var tran = db.transaction([key],'readwrite');
+            try {
+                var tran = db.transaction([key], 'readwrite');
                 var objectStore = tran.objectStore(key);
                 var req = objectStore.add(item);
                 req.onsuccess = function () {
@@ -59,7 +59,7 @@ angular.module('panel').service('IndexDBService',['$q',function ($q) {
                 req.onerror = function (e) {
                     defer.reject(e);
                 };
-            }catch(e){
+            } catch (e) {
                 defer.reject(e);
             }
             return defer;
@@ -67,31 +67,31 @@ angular.module('panel').service('IndexDBService',['$q',function ($q) {
     };
     this.clearObjectStore = function (key) {
         var defer = $q.defer();
-        if(null != this.db){
-            try{
-                var tran = db.transaction([key],'readwrite');
+        if (null != this.db) {
+            try {
+                var tran = db.transaction([key], 'readwrite');
                 var objectStore = tran.objectStore(key);
-                var req= objectStore.clear();
+                var req = objectStore.clear();
                 req.onsuccess = function () {
                     defer.resolve(req.result);
                 };
                 req.onerror = function (e) {
                     defer.reject(e);
                 };
-            }catch(e){
+            } catch (e) {
                 defer.reject(e);
             }
-        }else{
+        } else {
             defer.resolve();
         }
         return defer.promise;
     };
     this.getAll = function (key) {
         return get(this.db);
-        function get(db){
+        function get(db) {
             var defer = $q.defer();
-            try{
-                var tran = db.transaction([key],'readonly');
+            try {
+                var tran = db.transaction([key], 'readonly');
                 var objectStore = tran.objectStore(key);
                 var req = objectStore.getAll();
                 req.onsuccess = function () {
@@ -100,7 +100,7 @@ angular.module('panel').service('IndexDBService',['$q',function ($q) {
                 req.onerror = function (e) {
                     defer.reject(e);
                 };
-            }catch (e){
+            } catch (e) {
                 defer.reject(e);
             }
             return defer.promise;

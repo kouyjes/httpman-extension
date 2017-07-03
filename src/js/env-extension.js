@@ -1,5 +1,5 @@
-function fixTwo(value){
-    if(value < 10){
+function fixTwo(value) {
+    if (value < 10) {
         return '0' + value;
     }
     return '' + value;
@@ -17,74 +17,74 @@ Date.prototype.toDetailString = function () {
     result.push(fixTwo(this.getSeconds()));
     return result.join('');
 };
-function MockTabs(){
+function MockTabs() {
 }
 MockTabs.prototype.executeScript = function () {
 };
-function MockChrome(){
+function MockChrome() {
     this.tabs = new MockTabs();
 }
-if(typeof chrome === 'undefined'){
+if (typeof chrome === 'undefined') {
     chrome = new MockChrome();
 }
-if(typeof chrome.downloads === 'undefined'){
+if (typeof chrome.downloads === 'undefined') {
     chrome.downloads = {};
 }
-if(typeof chrome.windows === 'undefined'){
+if (typeof chrome.windows === 'undefined') {
     chrome.windows = {
         create: function () {
         },
-        onRemoved:{
-            addListener:null
+        onRemoved: {
+            addListener: null
         }
     };
 }
 var JsRuntime = {
-    enabledClipboard:false
+    enabledClipboard: false
 };
 JsRuntime.notification = function (option) {
     if (!("Notification" in window)) {
         return;
     }
     else if (Notification.permission === "granted") {
-        new Notification(option.title,option);
+        new Notification(option.title, option);
     }
     else if (Notification.permission !== 'denied') {
         Notification.requestPermission(function (permission) {
             if (permission === "granted") {
-                new Notification(option.title,option);
+                new Notification(option.title, option);
             }
         });
     }
 }
 var windowCache = {};
 var tabManager = {
-    current:null
+    current: null
 };
 chrome.windows.onRemoved.addListener(function (windowId) {
     var keyId;
     Object.keys(windowCache).some(function (key) {
-        if(windowCache[key].id === windowId){
+        if (windowCache[key].id === windowId) {
             keyId = key;
             return true;
         }
     });
-    if(keyId){
+    if (keyId) {
         delete windowCache[keyId];
     }
 });
-chrome.tabs.onRemoved.addListener(function(tabId){
-    if(tabManager.current && tabManager.current.id === tabId){
+chrome.tabs.onRemoved.addListener(function (tabId) {
+    if (tabManager.current && tabManager.current.id === tabId) {
         tabManager.current = null;
     }
 });
-chrome.windows.onFocusChanged.addListener(function(windowId){
-    if(windowId < 0){
+chrome.windows.onFocusChanged.addListener(function (windowId) {
+    if (windowId < 0) {
         return;
     }
-    chrome.tabs.query({windowId:windowId,highlighted:true}, function(tabs){
+    chrome.tabs.query({windowId: windowId, highlighted: true}, function (tabs) {
         tabs.some(function (tab) {
-            if(!tab.url.startsWith('chrome')){
+            if (!tab.url.startsWith('chrome')) {
                 tabManager.current = tab;
             }
         });
@@ -92,53 +92,53 @@ chrome.windows.onFocusChanged.addListener(function(windowId){
 });
 chrome.tabs.onActivated.addListener(function (activeInfo) {
     chrome.tabs.get(activeInfo.tabId, function (tab) {
-        if(!tab.url.startsWith('chrome')){
+        if (!tab.url.startsWith('chrome')) {
             tabManager.current = tab;
         }
     });
 });
 /*chrome.webRequest.onErrorOccurred.addListener(function (result) {
-    alert(error);
-});*/
+ alert(error);
+ });*/
 JsRuntime.createWindow = function (url) {
     var win = windowCache[url];
-    if(win){
-        chrome.windows.update(win.id,{focused: true});
+    if (win) {
+        chrome.windows.update(win.id, {focused: true});
         return;
     }
-    var width = screen.availWidth,height = screen.availHeight;
-    var w = 1200,h = 800;
-    var left  = (width - w)/2,top = (height - h)/2;
+    var width = screen.availWidth, height = screen.availHeight;
+    var w = 1200, h = 800;
+    var left = (width - w) / 2, top = (height - h) / 2;
     chrome.windows.create({
             url: url,
-            type:'popup',
+            type: 'popup',
             focused: true,
-            left:left,
-            top:top,
+            left: left,
+            top: top,
             width: 1200,
             height: 800
         },
-        function(window) {
+        function (window) {
             windowCache[url] = window;
         });
 };
 JsRuntime.createTab = function (url) {
     chrome.tabs.create({
-        url:url
+        url: url
     });
 };
 JsRuntime.getClipboardContent = function () {
     var input = $('#hidden-text-input');
-    if(input.size() === 0){
+    if (input.size() === 0) {
         input = $('<input/>').css({
-            width:0,
-            height:0,
-            border:'none',
-            'font-size':0,
-            padding:0,
-            position:'absolute',
-            top:0,
-            left:0
+            width: 0,
+            height: 0,
+            border: 'none',
+            'font-size': 0,
+            padding: 0,
+            position: 'absolute',
+            top: 0,
+            left: 0
         });
         $('body').append(input);
     }
@@ -147,33 +147,33 @@ JsRuntime.getClipboardContent = function () {
     return input.val();
 };
 JsRuntime.getExecute = function (executor) {
-    var params = ['(','',')','(',')',';'];
-    if(typeof executor === 'function'){
+    var params = ['(', '', ')', '(', ')', ';'];
+    if (typeof executor === 'function') {
         params[1] = executor.toString();
-    }else{
+    } else {
         return JsRuntime.getExecute(function () {
-           return executor;
+            return executor;
         });
     }
     return params.join('');
 };
-JsRuntime.execute = function (executor,tabId) {
+JsRuntime.execute = function (executor, tabId) {
     var defer = jQuery.Deferred();
-    tabId = tabId || (tabManager.current &&  tabManager.current.id);
+    tabId = tabId || (tabManager.current && tabManager.current.id);
     chrome.tabs.executeScript(tabId,
         {
-            code:this.getExecute(executor),
-            allFrames:true
+            code: this.getExecute(executor),
+            allFrames: true
         },
         function (datas) {
             var content = '';
             datas && datas.some(function (data) {
-                if(data){
+                if (data) {
                     content = data;
                     return true;
                 }
             });
-            if(!content && JsRuntime.enabledClipboard){
+            if (!content && JsRuntime.enabledClipboard) {
                 content = this.getClipboardContent();
             }
             defer.resolve(content);
@@ -191,65 +191,65 @@ JsRuntime.getSelectContent = function (tabId) {
     return this.execute(function () {
         var selection = window.getSelection();
         return selection.toString();
-    },tabId);
+    }, tabId);
 };
-JsRuntime.download = function (content,filename,saveAs) {
+JsRuntime.download = function (content, filename, saveAs) {
     var defer = jQuery.Deferred();
     var blob = new Blob([content]);
     var url = URL.createObjectURL(blob);
-    saveAs = saveAs === false?false:true;
+    saveAs = saveAs === false ? false : true;
     chrome.downloads.download({
-         url:url,
-         filename: filename,
-         saveAs:saveAs,
-         conflictAction:'overwrite'
-     }, function () {
+        url: url,
+        filename: filename,
+        saveAs: saveAs,
+        conflictAction: 'overwrite'
+    }, function () {
         defer.resolve();
-     });
+    });
     return defer.promise();
 };
 JsRuntime.getAbsoluteUrl = function (url) {
     return chrome.runtime.getURL(url);
 };
-JsRuntime.setCookie = function (url,cookie) {
+JsRuntime.setCookie = function (url, cookie) {
     return new Promise(function (resolve) {
-        if(!cookie.name){
+        if (!cookie.name) {
             resolve(cookie);
             return;
         }
         chrome.cookies.set({
-            url:url,
-            name:cookie.name,
-            value:cookie.value,
-            domain:cookie.domain,
-            path:cookie.path
+            url: url,
+            name: cookie.name,
+            value: cookie.value,
+            domain: cookie.domain,
+            path: cookie.path
         }, function (d) {
             resolve(d);
         });
     });
 
 };
-JsRuntime.addAllCookies = function (url,cookies) {
+JsRuntime.addAllCookies = function (url, cookies) {
     var promises = [];
     cookies.forEach(function (cookie) {
-        promises.push(this.setCookie(url,cookie));
+        promises.push(this.setCookie(url, cookie));
     }.bind(this));
     return Promise.all(promises);
 };
 JsRuntime.getAllCookies = function (url) {
-    return new Promise(function (resolve,reject) {
+    return new Promise(function (resolve, reject) {
         chrome.cookies.getAll({
-            url:url
+            url: url
         }, function (cookies) {
             resolve(cookies || []);
         });
     });
 };
-JsRuntime.removeCookie = function (url,name) {
-    return new Promise(function (resolve,reject) {
+JsRuntime.removeCookie = function (url, name) {
+    return new Promise(function (resolve, reject) {
         chrome.cookies.remove({
-            url:url,
-            name:name
+            url: url,
+            name: name
         }, function (d) {
             resolve(d);
         });
@@ -265,8 +265,8 @@ JsRuntime.removeAllCookies = function (url) {
     return this.getAllCookies(url).then(function (cookies) {
         var promises = [];
         cookies.forEach(function (cookie) {
-            promises.push(this.removeCookie(url,cookie.name));
+            promises.push(this.removeCookie(url, cookie.name));
         }.bind(this));
-        return  Promise.all(promises);
+        return Promise.all(promises);
     }.bind(this));
 };

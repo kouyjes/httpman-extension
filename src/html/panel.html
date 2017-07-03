@@ -20,188 +20,213 @@
     <script src="../js/main.js"></script>
 </head>
 <body>
-    <div v-cloak id="app" class="flex flex-column">
-        <div class="basic-info">
-            <div class="c-row flex flex-row c-row-layout">
-                <div class="c-row-title">
-                    <div class="http-method dropdown">
-                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                            {{selection.method}}
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                            <li v-for="method in config.methods" v-on:click="selectMethod(method)">
-                                <a href="#">{{method}}</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="c-row-input flex-item">
-                    <input v-model="selection.url"/>
-                </div>
-                <div class="c-row-title">
-                    <button v-on:click="send()" class="btn btn-primary">
-                        Send
+<div v-cloak id="app" class="flex flex-column">
+    <div class="basic-info">
+        <div class="c-row flex flex-row c-row-layout">
+            <div class="c-row-title">
+                <div class="http-method dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        {{selection.method}}
+                        <span class="caret"></span>
                     </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                        <li v-for="method in config.methods" v-on:click="selectMethod(method)">
+                            <a href="#">{{method}}</a>
+                        </li>
+                    </ul>
                 </div>
+            </div>
+            <div class="c-row-input flex-item">
+                <input v-model="selection.url"/>
+            </div>
+            <div class="c-row-title">
+                <button v-on:click="send()" class="btn btn-primary">
+                    Send
+                </button>
             </div>
         </div>
-        <div class="flex flex-column flex-item">
-            <div class="flex flex-column  panel panel-info panel-request" key="panel-request">
-                <header class="panel-heading">
-                    <div v-bind:class="{ 'tab-active': selection.tabState===tab}"
-                         v-for="tab in selection.tabs" class="flex flex-h-center flex-v-center header-tab button" v-on:click="selection.setTabState(tab)">
-                        {{tab}}
-                    </div>
-                </header>
-                <div class="flex flex-column flex-item" v-if="selection.tabState==='Body'">
-                    <div class="c-row c-row-layout layout-option content-type">
-                        <div v-bind:class="{ 'tab-active': selection.contentType===contentType}"
-                             v-for="contentType in config.contentTypes" v-on:click="selectContentType(contentType)"
-                             class="flex flex-h-center flex-v-center float-left c-row-title tab-item button">
-                            {{contentType.name}}
-                        </div>
-                    </div>
-
-                    <div class="flex-item c-row c-row-layout json-editor" key="json-editor" v-if="selection.contentType.name==='Json'">
-                        <div  v-json-editor="selection.body" ></div>
-                    </div>
-
-                    <div class="flex flex-column flex-item c-row c-row-layout" key="param-editor" v-if="selection.contentType.name!=='Json'">
-                        <div class="flex-item">
-                            <div class="content-panel">
-                                <div v-if="selection.body.params.length===0" class="height100 flex flex-v-center flex-h-center">
-                                    <button v-on:click="addParam()" class="add-param-btn btn btn-success glyphicon glyphicon-plus"></button>
-                                </div>
-                                <div  v-for="(param,index) in selection.body.params" class="flex c-row-param c-row-layout">
-                                    <div class="param-field param-field-name">
-                                        <input type="text" v-model="param.name" v-title-desc placeholder="please input param name"/>
-                                    </div>
-                                    <div class="flex-item param-field param-field-input">
-                                        <input v-if="param.type!=='file'" type="text" v-model="param.value" v-title-desc placeholder="please input param value"/>
-                                        <input readonly v-if="param.type==='file'" type="text" v-bind:value="param.caption" v-title-desc />
-                                    </div>
-                                    <div class="param-field param-field-opt">
-
-                                        <file-upload v-on:change="fileChange($event,param)" v-if="selection.contentType.name==='Multipart'" class="glyphicon glyphicon-open" title="upload file">
-                                        </file-upload>
-                                        <button v-on:click="addParam(param)" class="glyphicon glyphicon-plus" title="add a param after this one"></button>
-                                        <button v-on:click="removeParam(param)" class="glyphicon glyphicon-minus" title="remove this param"></button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-                <div class="flex-item" v-if="selection.tabState==='Headers'">
-                    <div class="height100 content-panel">
-                        <div v-if="selection.headers.length===0" class="height100 flex flex-v-center flex-h-center">
-                            <button v-on:click="addHeader()" class="add-param-btn btn btn-success glyphicon glyphicon-plus"></button>
-                        </div>
-                        <div v-for="header in selection.headers" class="flex c-row-param c-row-layout">
-                            <div class="param-field param-field-name">
-                                <input type="text" v-model="header.name" v-title-desc placeholder="please input header name"/>
-                            </div>
-                            <div class="flex-item param-field param-field-input">
-                                <input type="text" v-model="header.value" v-title-desc placeholder="please input header value"/>
-                            </div>
-                            <div class="param-field param-field-opt">
-                                <button v-on:click="addHeader(header)" class="glyphicon glyphicon-plus" title="add a param after this one"></button>
-                                <button v-on:click="removeHeader(header)" class="glyphicon glyphicon-minus" title="remove this param"></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex-item" v-if="selection.tabState==='Cookies'">
-                    <div class="content-panel">
-                        <div v-if="selection.cookies.length===0" class="height100 flex flex-v-center flex-h-center">
-                            <button v-on:click="addItem(selection.cookies)" class="add-param-btn btn btn-success glyphicon glyphicon-plus"></button>
-                        </div>
-                        <div v-for="cookie in selection.cookies" class="flex c-row-param c-row-layout">
-                            <div class="param-field param-field-input">
-                                <input type="text" v-model="cookie.name" title="please input cookie name" placeholder="name"/>
-                            </div>
-                            <div class="flex-item param-field param-field-input">
-                                <input type="text" v-model="cookie.value" title="please input cookie value" placeholder="value"/>
-                            </div>
-                            <div class="flex-item param-field param-field-input">
-                                <input type="text" v-model="cookie.domain" title="please input cookie domain" placeholder="domain"/>
-                            </div>
-                            <div class="flex-item param-field param-field-input">
-                                <input type="text" v-model="cookie.path" title="please input cookie path" placeholder="path"/>
-                            </div>
-                            <div class="param-field param-field-opt">
-                                <button v-on:click="addItem(selection.cookies,cookie)" class="glyphicon glyphicon-plus" title="add a param after this one"></button>
-                                <button v-on:click="removeItem(selection.cookies,cookie)" class="glyphicon glyphicon-minus" title="remove this param"></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex flex-column flex-item panel panel-success panel-response" key="panel-response">
-                <header class="panel-heading">
-                    <div v-bind:class="{ 'tab-active': response.tabState===tab}" v-for="tab in response.tabs" class="flex flex-h-center flex-v-center header-tab button"
-                         v-on:click="response.setTabState(tab)">
-                        {{tab}}
-                    </div>
-
-                    <div class="loading-state flex flex-v-center">
-                        <loading-circle  v-if="status.loading">
-                        </loading-circle>
-                    </div>
-                </header>
-                <div v-if="response.tabState==='Body'"  class="flex-item">
-                    <div class="content-panel">
-                        <response-view v-bind:response="response"></response-view>
-                    </div>
-                </div>
-                <div v-if="response.tabState==='Headers'"  class="flex-item">
-                    <div class="content-panel">
-                        <div v-for="header in response.headers" class="flex c-row-param c-row-layout">
-                            <div class="flex flex-v-center param-field param-field-name">
-                                {{header.name}}
-                            </div>
-                            <div class="param-field param-field-split flex flex-v-center">:</div>
-                            <div class="flex-item param-field param-field-input param-field-text">
-                                {{header.value}}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div v-if="response.tabState==='Cookies'"  class="flex-item">
-                    <div class="content-panel">
-                        <div v-for="cookie in response.cookies" class="flex c-row-param c-row-layout">
-                            <div class="flex flex-v-center param-field param-field-name param-field-text flex flex-v-center">
-                                {{cookie.name}}
-                            </div>
-                            <div class="param-field param-field-split flex flex-v-center">:</div>
-                            <div class="flex-item param-field param-field-input param-field-text flex flex-v-center">
-                                {{cookie.value}}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div v-if="response.tabState==='Console'"  class="flex-item">
-                    <div class="content-panel">
-                        <div v-if="value" v-for="(value,key) in response.abstract" class="flex c-row-param c-row-layout">
-                            <div class="flex flex-v-center param-field param-field-name param-field-text flex flex-v-center">
-                                {{key}}
-                            </div>
-                            <div class="param-field param-field-split flex flex-v-center">:</div>
-                            <div class="flex-item param-field param-field-input param-field-text flex flex-v-center">
-                                {{value}}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </div>
+    <div class="flex flex-column flex-item">
+        <div class="flex flex-column  panel panel-info panel-request" key="panel-request">
+            <header class="panel-heading">
+                <div v-bind:class="{ 'tab-active': selection.tabState===tab}"
+                     v-for="tab in selection.tabs" class="flex flex-h-center flex-v-center header-tab button"
+                     v-on:click="selection.setTabState(tab)">
+                    {{tab}}
+                </div>
+            </header>
+            <div class="flex flex-column flex-item" v-if="selection.tabState==='Body'">
+                <div class="c-row c-row-layout layout-option content-type">
+                    <div v-bind:class="{ 'tab-active': selection.contentType===contentType}"
+                         v-for="contentType in config.contentTypes" v-on:click="selectContentType(contentType)"
+                         class="flex flex-h-center flex-v-center float-left c-row-title tab-item button">
+                        {{contentType.name}}
+                    </div>
+                </div>
+
+                <div class="flex-item c-row c-row-layout json-editor" key="json-editor"
+                     v-if="selection.contentType.name==='Json'">
+                    <div v-json-editor="selection.body"></div>
+                </div>
+
+                <div class="flex flex-column flex-item c-row c-row-layout" key="param-editor"
+                     v-if="selection.contentType.name!=='Json'">
+                    <div class="flex-item">
+                        <div class="content-panel">
+                            <div v-if="selection.body.params.length===0"
+                                 class="height100 flex flex-v-center flex-h-center">
+                                <button v-on:click="addParam()"
+                                        class="add-param-btn btn btn-success glyphicon glyphicon-plus"></button>
+                            </div>
+                            <div v-for="(param,index) in selection.body.params" class="flex c-row-param c-row-layout">
+                                <div class="param-field param-field-name">
+                                    <input type="text" v-model="param.name" v-title-desc
+                                           placeholder="please input param name"/>
+                                </div>
+                                <div class="flex-item param-field param-field-input">
+                                    <input v-if="param.type!=='file'" type="text" v-model="param.value" v-title-desc
+                                           placeholder="please input param value"/>
+                                    <input readonly v-if="param.type==='file'" type="text" v-bind:value="param.caption"
+                                           v-title-desc/>
+                                </div>
+                                <div class="param-field param-field-opt">
+
+                                    <file-upload v-on:change="fileChange($event,param)"
+                                                 v-if="selection.contentType.name==='Multipart'"
+                                                 class="glyphicon glyphicon-open" title="upload file">
+                                    </file-upload>
+                                    <button v-on:click="addParam(param)" class="glyphicon glyphicon-plus"
+                                            title="add a param after this one"></button>
+                                    <button v-on:click="removeParam(param)" class="glyphicon glyphicon-minus"
+                                            title="remove this param"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="flex-item" v-if="selection.tabState==='Headers'">
+                <div class="height100 content-panel">
+                    <div v-if="selection.headers.length===0" class="height100 flex flex-v-center flex-h-center">
+                        <button v-on:click="addHeader()"
+                                class="add-param-btn btn btn-success glyphicon glyphicon-plus"></button>
+                    </div>
+                    <div v-for="header in selection.headers" class="flex c-row-param c-row-layout">
+                        <div class="param-field param-field-name">
+                            <input type="text" v-model="header.name" v-title-desc
+                                   placeholder="please input header name"/>
+                        </div>
+                        <div class="flex-item param-field param-field-input">
+                            <input type="text" v-model="header.value" v-title-desc
+                                   placeholder="please input header value"/>
+                        </div>
+                        <div class="param-field param-field-opt">
+                            <button v-on:click="addHeader(header)" class="glyphicon glyphicon-plus"
+                                    title="add a param after this one"></button>
+                            <button v-on:click="removeHeader(header)" class="glyphicon glyphicon-minus"
+                                    title="remove this param"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex-item" v-if="selection.tabState==='Cookies'">
+                <div class="content-panel">
+                    <div v-if="selection.cookies.length===0" class="height100 flex flex-v-center flex-h-center">
+                        <button v-on:click="addItem(selection.cookies)"
+                                class="add-param-btn btn btn-success glyphicon glyphicon-plus"></button>
+                    </div>
+                    <div v-for="cookie in selection.cookies" class="flex c-row-param c-row-layout">
+                        <div class="param-field param-field-input">
+                            <input type="text" v-model="cookie.name" title="please input cookie name"
+                                   placeholder="name"/>
+                        </div>
+                        <div class="flex-item param-field param-field-input">
+                            <input type="text" v-model="cookie.value" title="please input cookie value"
+                                   placeholder="value"/>
+                        </div>
+                        <div class="flex-item param-field param-field-input">
+                            <input type="text" v-model="cookie.domain" title="please input cookie domain"
+                                   placeholder="domain"/>
+                        </div>
+                        <div class="flex-item param-field param-field-input">
+                            <input type="text" v-model="cookie.path" title="please input cookie path"
+                                   placeholder="path"/>
+                        </div>
+                        <div class="param-field param-field-opt">
+                            <button v-on:click="addItem(selection.cookies,cookie)" class="glyphicon glyphicon-plus"
+                                    title="add a param after this one"></button>
+                            <button v-on:click="removeItem(selection.cookies,cookie)" class="glyphicon glyphicon-minus"
+                                    title="remove this param"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-column flex-item panel panel-success panel-response" key="panel-response">
+            <header class="panel-heading">
+                <div v-bind:class="{ 'tab-active': response.tabState===tab}" v-for="tab in response.tabs"
+                     class="flex flex-h-center flex-v-center header-tab button"
+                     v-on:click="response.setTabState(tab)">
+                    {{tab}}
+                </div>
+
+                <div class="loading-state flex flex-v-center">
+                    <loading-circle v-if="status.loading">
+                    </loading-circle>
+                </div>
+            </header>
+            <div v-if="response.tabState==='Body'" class="flex-item">
+                <div class="content-panel">
+                    <response-view v-bind:response="response"></response-view>
+                </div>
+            </div>
+            <div v-if="response.tabState==='Headers'" class="flex-item">
+                <div class="content-panel">
+                    <div v-for="header in response.headers" class="flex c-row-param c-row-layout">
+                        <div class="flex flex-v-center param-field param-field-name">
+                            {{header.name}}
+                        </div>
+                        <div class="param-field param-field-split flex flex-v-center">:</div>
+                        <div class="flex-item param-field param-field-input param-field-text">
+                            {{header.value}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div v-if="response.tabState==='Cookies'" class="flex-item">
+                <div class="content-panel">
+                    <div v-for="cookie in response.cookies" class="flex c-row-param c-row-layout">
+                        <div class="flex flex-v-center param-field param-field-name param-field-text flex flex-v-center">
+                            {{cookie.name}}
+                        </div>
+                        <div class="param-field param-field-split flex flex-v-center">:</div>
+                        <div class="flex-item param-field param-field-input param-field-text flex flex-v-center">
+                            {{cookie.value}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div v-if="response.tabState==='Console'" class="flex-item">
+                <div class="content-panel">
+                    <div v-if="value" v-for="(value,key) in response.abstract" class="flex c-row-param c-row-layout">
+                        <div class="flex flex-v-center param-field param-field-name param-field-text flex flex-v-center">
+                            {{key}}
+                        </div>
+                        <div class="param-field param-field-split flex flex-v-center">:</div>
+                        <div class="flex-item param-field param-field-input param-field-text flex flex-v-center">
+                            {{value}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
 </body>
 </html>

@@ -1,8 +1,9 @@
 var BaseHttp = (function () {
-    function BaseHttp(baseHttp){
-        this.tabs = ['Body','Headers','Cookies'];
+    function BaseHttp(baseHttp) {
+        this.tabs = ['Body', 'Headers', 'Cookies'];
         this.tabState = baseHttp && baseHttp.tabState ? baseHttp.tabState : this.tabs[0];
     }
+
     BaseHttp.prototype.setTabState = function (tab) {
         this.tabState = tab;
     };
@@ -12,14 +13,15 @@ var BaseHttp = (function () {
     return BaseHttp;
 })();
 var HttpResponse = (function () {
-    function HttpResponse(response){
-        BaseHttp.apply(this,arguments);
+    function HttpResponse(response) {
+        BaseHttp.apply(this, arguments);
         this.tabs = this.tabs.concat('Console');
         this.init();
-        if(response){
-            Object.assign(this,response);
+        if (response) {
+            Object.assign(this, response);
         }
     }
+
     HttpResponse.prototype = Object.create(BaseHttp.prototype);
     HttpResponse.prototype.init = function () {
         this.token = JsRuntime.getId();
@@ -27,9 +29,9 @@ var HttpResponse = (function () {
         this.headers = [];
         this.cookies = [];
         this.abstract = {
-            statusCode:undefined,
-            statusText:undefined,
-            cost:undefined
+            statusCode: undefined,
+            statusText: undefined,
+            cost: undefined
         };
     };
     HttpResponse.prototype.reset = function () {
@@ -39,11 +41,12 @@ var HttpResponse = (function () {
     return HttpResponse;
 })();
 var HttpHeaders = (function () {
-    function HttpHeaders(headers){
-        if(headers){
-            Object.assign(this,headers);
+    function HttpHeaders(headers) {
+        if (headers) {
+            Object.assign(this, headers);
         }
     }
+
     HttpHeaders.prototype.size = function () {
         return Object.keys(this).length;
     };
@@ -51,39 +54,40 @@ var HttpHeaders = (function () {
 })();
 var HttpRequest = (function () {
     HttpRequest.config = {
-        methods:['GET','POST','UPDATE','PUT','DELETE','OPTION'],
-        contentTypes:[
+        methods: ['GET', 'POST', 'UPDATE', 'PUT', 'DELETE', 'OPTION'],
+        contentTypes: [
             {
-                name:'Json',
-                caption:'Json',
-                value:'application/json'
+                name: 'Json',
+                caption: 'Json',
+                value: 'application/json'
             },
             {
-                name:'Urlencoded',
-                caption:'Urlencoded',
-                value:'application/x-www-form-urlencoded'
+                name: 'Urlencoded',
+                caption: 'Urlencoded',
+                value: 'application/x-www-form-urlencoded'
             },
             {
-                name:'Multipart',
-                caption:'Multipart',
-                value:'multipart/form-data'
+                name: 'Multipart',
+                caption: 'Multipart',
+                value: 'multipart/form-data'
             }
         ]
     };
-    function HttpRequestBody(body){
+    function HttpRequestBody(body) {
         this.object = {};
         this.params = [];
-        if(body){
-            Object.assign(this,body);
+        if (body) {
+            Object.assign(this, body);
         }
     }
+
     HttpRequestBody.prototype.toJson = function () {
         return JSON.stringify(this.object);
     };
     HttpRequestBody.prototype.serializeArray = function () {
         var paramStrings = [];
         this.params.forEach(function (param) {
-            if(!param.name || param.type === 'file'){
+            if (!param.name || param.type === 'file') {
                 return;
             }
             paramStrings.push(param.name + '=' + param.value);
@@ -93,13 +97,13 @@ var HttpRequest = (function () {
     HttpRequestBody.prototype.getFormData = function () {
         var formData = new FormData();
         this.params.forEach(function (param) {
-            formData.append(param.name,param.value);
+            formData.append(param.name, param.value);
         });
         return formData;
     };
-    function HttpRequest(httpRequest){
+    function HttpRequest(httpRequest) {
 
-        BaseHttp.apply(this,arguments);
+        BaseHttp.apply(this, arguments);
         this.method = HttpRequest.config.methods[0];
         this.url = '';
         this.headers = [];
@@ -107,18 +111,19 @@ var HttpRequest = (function () {
         this.contentType = HttpRequest.config.contentTypes[0];
         this.body = new HttpRequestBody();
 
-        if(httpRequest){
-            Object.assign(this,httpRequest);
+        if (httpRequest) {
+            Object.assign(this, httpRequest);
         }
-        if(!(this.body instanceof HttpRequestBody)){
+        if (!(this.body instanceof HttpRequestBody)) {
             this.body = new HttpRequestBody(this.body);
         }
     }
+
     HttpRequest.prototype = Object.create(BaseHttp.prototype);
     HttpRequest.serializeArray = function (params) {
         var paramStrings = [];
         params.forEach(function (param) {
-            if(!param.name){
+            if (!param.name) {
                 return;
             }
             paramStrings.push(param.name + '=' + param.value);
@@ -126,28 +131,28 @@ var HttpRequest = (function () {
         return paramStrings.join('&');
     };
     HttpRequest.prototype.setContentType = function (contentType) {
-        if(['Urlencoded','Multipart'].indexOf(contentType.name) >= 0){
-            if(contentType.name === 'Urlencoded'){
+        if (['Urlencoded', 'Multipart'].indexOf(contentType.name) >= 0) {
+            if (contentType.name === 'Urlencoded') {
                 this.body.params = this.body.params.filter(function (param) {
                     return param.type !== 'file';
                 });
             }
             Object.keys(this.body.object).forEach(function (key) {
-                if(!key){
+                if (!key) {
                     return;
                 }
                 var value = this.body.object[key];
-                if(['string','number','boolean'].indexOf(typeof value) >= 0){
+                if (['string', 'number', 'boolean'].indexOf(typeof value) >= 0) {
                     this.body.params.push({
-                        name:key,
-                        value:'' + value
+                        name: key,
+                        value: '' + value
                     });
                 }
             }.bind(this));
             this.body.object = {};
-        }else{
+        } else {
             this.body.params.forEach(function (param) {
-                if(param.name && param.type !== 'file'){
+                if (param.name && param.type !== 'file') {
                     this.body.object[param.name] = param.value;
                 }
             }.bind(this));
