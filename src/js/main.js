@@ -85,6 +85,7 @@ $(function () {
                         _.response.fill(resultOption);
                     }, function (result) {
                         _.status.loading = false;
+                        resultOption.data = result[0].responseText;
                         resultOption.xhr = result[0];
                         resultOption.endTime = new Date();
                         _.response.fill(resultOption);
