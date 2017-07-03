@@ -1,3 +1,10 @@
+var appConsole = {
+    name:'console',
+    value:undefined
+};
+window.onerror = function (e) {
+    appConsole.value = e.message;
+};
 $(function () {
     $.get('component.html').then(function (html) {
         $(document.body).append(html);
@@ -9,6 +16,7 @@ $(function () {
             el: '#app',
             data: {
                 config: BaseHttp.config,
+                console: appConsole,
                 status: {
                     loading: false
                 },

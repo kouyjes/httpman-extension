@@ -5,3 +5,17 @@
   height:100%;
 
 }
+.error-text{
+  color:red;
+}
+.json-container{
+  .close{
+    float:none;
+    font-size: inherit;
+    font-weight: normal;
+    line-height: 1;
+    color: inherit;
+    text-shadow: none;
+    opacity: 1;
+  }
+}

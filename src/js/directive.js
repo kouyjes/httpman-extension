@@ -49,11 +49,32 @@
         }
     };
     var jsonViewer = {
+        _update: function (el,binding) {
+
+            var jsonObject = null,
+                value = binding.value;
+
+            if(!value){
+                return;
+            }
+            try{
+                jsonObject = JSON.parse(value);
+            }catch(e){
+                console.error(e);
+            }
+
+            $(el).empty();
+            if(jsonObject){
+                $(el).jsonview(jsonObject);
+            }else{
+                $(el).append($('<span class="error-text"/>').text(value));
+            }
+        },
         inserted: function (el, binding) {
-            $(el).jsonview(binding.value);
+            jsonViewer._update.apply(this,arguments);
         },
         update: function (el, binding) {
-            $(el).jsonview(binding.value);
+            jsonViewer._update.apply(this,arguments);
         }
     };
     Vue.directive('json-editor', jsonEditor);

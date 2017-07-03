@@ -277,6 +277,8 @@ body{
         word-break: break-all;
         white-space:normal;
         &.param-field-name{
+          white-space: normal;
+          word-break: break-all;
           background-color:#dedddd;
         }
       }

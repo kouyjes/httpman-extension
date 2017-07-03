@@ -32,7 +32,7 @@
         }
 
         HttpResponse.contentTypes.some(function (type) {
-            if(type.value === contentTypeValue){
+            if(contentTypeValue.indexOf(type.value) >= 0){
                 this.contentType = type;
                 return true;
             }

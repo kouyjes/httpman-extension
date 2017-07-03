@@ -200,6 +200,8 @@ body {
         word-break: break-all;
         white-space: normal; }
         #app .c-row-param > .param-field.param-field-text.param-field-name {
+          white-space: normal;
+          word-break: break-all;
           background-color: #dedddd; }
 
 /*# sourceMappingURL=main.css.map */

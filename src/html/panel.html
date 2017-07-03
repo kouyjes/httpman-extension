@@ -190,11 +190,11 @@
             <div v-if="response.tabState==='Headers'" class="flex-item">
                 <div class="content-panel">
                     <div v-for="header in response.headers" class="flex c-row-param c-row-layout">
-                        <div class="flex flex-v-center param-field param-field-name">
+                        <div class="flex flex-v-center param-field param-field-name param-field-text flex flex-v-center">
                             {{header.name}}
                         </div>
                         <div class="param-field param-field-split flex flex-v-center">:</div>
-                        <div class="flex-item param-field param-field-input param-field-text">
+                        <div class="flex-item param-field param-field-input param-field-text  flex flex-v-center">
                             {{header.value}}
                         </div>
                     </div>
