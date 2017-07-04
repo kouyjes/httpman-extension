@@ -80,8 +80,24 @@
             jsonViewer._update.apply(this,arguments);
         }
     };
+    var imageViewer = {
+        _update: function (el,binding) {
+            var value = binding.value;
+            if(!value){
+                return;
+            }
+            $(el).empty().append($('<img/>').attr('src',value));
+        },
+        inserted: function (el, binding) {
+            imageViewer._update.apply(this,arguments);
+        },
+        update: function (el, binding) {
+            imageViewer._update.apply(this,arguments);
+        }
+    };
     Vue.directive('json-editor', jsonEditor);
     Vue.directive('title-desc', titleDesc);
     Vue.directive('iframe-html', iframeHtml);
     Vue.directive('json-viewer', jsonViewer);
+    Vue.directive('image-viewer', imageViewer);
 })(Vue);

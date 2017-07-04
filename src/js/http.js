@@ -34,12 +34,17 @@ var BaseHttp = (function () {
 var HttpResponse = (function () {
     var responseContentTypes = [
         {
-            name:'text',
-            value:'application/text'
+            name:'Text',
+            reg:/text\/[^/]+]/
         },
         {
             name:'Json',
-            value:'application/json'
+            reg:/application\/json/
+        },
+        {
+            name:'Image',
+            reg:/image\/[^/]+/,
+            binary:true
         }
     ];
     function HttpResponse(response) {

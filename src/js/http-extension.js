@@ -32,7 +32,7 @@
         }
 
         contentTypeValue && HttpResponse.contentTypes.some(function (type) {
-            if(contentTypeValue.indexOf(type.value) >= 0){
+            if(type.reg.test(contentTypeValue)){
                 this.contentType = type;
                 return true;
             }
@@ -51,8 +51,11 @@
                     domain: cookie.domain
                 });
             });
-
-            _.text = JSON.stringify(data);
+            if(_.contentType.binary && contentTypeValue){
+                _.text = URL.createObjectURL(new Blob([data],{type:contentTypeValue}));
+            }else{
+                _.text = JSON.stringify(data);
+            }
             _.cookies = _cookies;
             _.headers = _headers;
 
