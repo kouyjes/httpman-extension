@@ -31,7 +31,7 @@
             });
         }
 
-        HttpResponse.contentTypes.some(function (type) {
+        contentTypeValue && HttpResponse.contentTypes.some(function (type) {
             if(contentTypeValue.indexOf(type.value) >= 0){
                 this.contentType = type;
                 return true;
@@ -127,9 +127,8 @@
     HttpRequest.prototype.send = function () {
         var option = this.build();
         var _ = this;
-        return JsRuntime.removeAllCookies(option.url).then(function () {
-            return JsRuntime.addAllCookies(option.url, option.cookies);
-        }).then(function () {
+
+        return JsRuntime.addAllCookies(option.url, option.cookies).then(function () {
             return _._send(option);
         }.bind(this));
     };

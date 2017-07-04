@@ -26,6 +26,9 @@
                 }
             };
             el.editor = new JSONEditor(el, options, binding.value.object);
+            el.querySelector('.ace_text-input').onpaste = function () {
+                el.editor.format();
+            };
         }
     };
     var titleDesc = {
