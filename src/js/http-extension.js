@@ -51,11 +51,7 @@
                     domain: cookie.domain
                 });
             });
-            if(_.contentType.binary && contentTypeValue){
-                _.text = URL.createObjectURL(new Blob([data],{type:contentTypeValue}));
-            }else{
-                _.text = JSON.stringify(data);
-            }
+            _.text = JSON.stringify(data);
             _.cookies = _cookies;
             _.headers = _headers;
 

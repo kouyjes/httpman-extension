@@ -1,14 +1,14 @@
 <script type="text/v-template" id="response-view">
     <div>
-        <div v-if="response.contentType.name === 'Text'">
+        <div v-if="response.contentType.name !== 'Json'">
             <iframe src="about:blank" class="iframe-html-comp" v-iframe-html="response.text"></iframe>
         </div>
         <div ref="jsonView" v-if="response.contentType.name === 'Json'" v-json-viewer="response.text">
 
         </div>
-        <div ref="imageView"  v-if="response.contentType.name === 'Image'" v-image-viewer="response.text">
+        <!--<div ref="imageView"  v-if="response.contentType.name === 'Image'" v-image-viewer="response.text">
 
-        </div>
+        </div>-->
     </div>
 </script>
 <script type="text/v-template" id="file-upload">
