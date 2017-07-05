@@ -187,7 +187,8 @@ body {
         #app .c-row-param > .param-field button:active {
           background-color: #ace4b3; }
       #app .c-row-param > .param-field.param-field-name {
-        width: 200px;
+        width: 30%;
+        min-width: 200px;
         font-weight: bold; }
       #app .c-row-param > .param-field.param-field-opt {
         width: 120px;

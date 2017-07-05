@@ -260,7 +260,8 @@ body{
         }
       }
       &.param-field-name{
-        width:200px;
+        width:30%;
+        min-width:200px;
         font-weight: bold;
       }
       &.param-field-opt{
