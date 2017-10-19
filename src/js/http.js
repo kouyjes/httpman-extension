@@ -4,7 +4,7 @@ var BaseHttp = (function () {
         this.tabState = baseHttp && baseHttp.tabState ? baseHttp.tabState : this.tabs[0];
     }
     BaseHttp.config = {
-        methods: ['GET', 'POST', 'UPDATE', 'PUT', 'DELETE', 'OPTION'],
+        methods: ['GET','HEAD', 'POST', 'PUT','PATCH', 'DELETE', 'OPTION'],
         contentTypes: [
             {
                 name: 'Json',

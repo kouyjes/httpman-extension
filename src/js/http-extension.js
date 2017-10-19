@@ -114,6 +114,8 @@
         }
         return option;
     };
+    HttpRequest.prototype['PUT'] = HttpRequest.prototype['POST'];
+    HttpRequest.prototype['PATCH'] = HttpRequest.prototype['POST'];
     HttpRequest.prototype._send = function (option) {
         return new Promise(function (resolve, reject) {
             $.ajax(option).then(function (data, state, xhr) {
