@@ -1,9 +1,9 @@
 var opened = false;
 var panel = 0;
-var _width = screen.width * 0.65,
-    _height = screen.height * 0.65,
-    _left = (screen.width - _width) / 2,
-    _top = (screen.height - _height) /2;
+var _width = Math.round(screen.width * 0.65),
+    _height = Math.round(screen.height * 0.65),
+    _left = Math.round((screen.width - _width) / 2),
+    _top = Math.round((screen.height - _height) /2);
 
 function createPanel(){
     if (opened === false){
