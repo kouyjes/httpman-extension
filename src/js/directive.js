@@ -41,8 +41,16 @@
     var iframeHtml = {
         _update: function (el, binding) {
             var doc = el.contentWindow.document;
+            var link = document.createElement('link');
+            link.type = 'text/css';
+            link.rel = 'stylesheet';
+            link.href = '../css/scrollbar.css';
             doc.open();
-            doc.write(binding.value);
+            try{
+                doc.write(binding.value);
+            }catch(e){}
+            doc.head.appendChild(link);
+
         },
         inserted: function (el, binding) {
             iframeHtml._update.apply(this, arguments);

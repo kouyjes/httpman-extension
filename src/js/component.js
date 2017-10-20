@@ -47,8 +47,18 @@ var test = [];
     var responseView = {
         template: '#response-view',
         props: ['response'],
+        data: function () {
+            return {
+                viewType:'View'
+            };
+        },
         methods:{
-
+            setView: function () {
+                this.viewType = 'View';
+            },
+            setSource: function () {
+                this.viewType = 'Source';
+            }
         }
     };
     var fileComp = {

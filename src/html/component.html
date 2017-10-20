@@ -1,14 +1,23 @@
 <script type="text/v-template" id="response-view">
-    <div>
-        <div v-if="response.contentType.name !== 'Json'">
-            <iframe src="about:blank" class="iframe-html-comp" v-iframe-html="response.text"></iframe>
-        </div>
-        <div ref="jsonView" v-if="response.contentType.name === 'Json'" v-json-viewer="response.text">
+    <div class="response-view-wrapper" v-if="response.text">
+        <header>
+            <div class="tab-item" :class="{'selected':viewType==='View'}" @click="setView()">View</div>
+            <div class="tab-item" :class="{'selected':viewType==='Source'}" @click="setSource()">Source</div>
+        </header>
+        <template v-if="viewType==='View'">
+            <div class="content" v-if="response.contentType.name !== 'Json'">
+                <iframe src="about:blank" class="iframe-html-comp" v-iframe-html="response.text"></iframe>
+            </div>
+            <div class="content" ref="jsonView" v-if="response.contentType.name === 'Json'" v-json-viewer="response.text">
 
-        </div>
-        <!--<div ref="imageView"  v-if="response.contentType.name === 'Image'" v-image-viewer="response.text">
+            </div>
+            <!--<div ref="imageView"  v-if="response.contentType.name === 'Image'" v-image-viewer="response.text">
 
-        </div>-->
+            </div>-->
+        </template>
+        <template v-else>
+            <textarea v-model="response.text"></textarea>
+        </template>
     </div>
 </script>
 <script type="text/v-template" id="file-upload">

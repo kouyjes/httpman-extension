@@ -1,3 +1,37 @@
+.response-view-wrapper {
+  position: relative;
+  padding-top: 30px;
+  width: 100%;
+  height: 100%;
+  overflow: hidden; }
+  .response-view-wrapper header {
+    height: 30px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: #b6e2d0; }
+    .response-view-wrapper header .tab-item {
+      float: left;
+      height: 100%;
+      padding: 6px;
+      border-right: 1px solid #b3bdb2;
+      -webkit-user-select: none; }
+      .response-view-wrapper header .tab-item:active {
+        background-color: #abd2c2; }
+      .response-view-wrapper header .tab-item.selected {
+        background-color: #60d688; }
+  .response-view-wrapper textarea {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    resize: none;
+    border: none; }
+  .response-view-wrapper .content {
+    width: 100%;
+    height: 100%;
+    overflow: auto; }
+
 .iframe-html-comp {
   border: none;
   position: absolute;

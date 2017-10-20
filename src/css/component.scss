@@ -1,3 +1,44 @@
+.response-view-wrapper{
+  position: relative;
+  $headerHeight:30px;
+  padding-top:$headerHeight;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  header{
+    height:$headerHeight;
+    position: absolute;
+    top:0;
+    left:0;
+    width:100%;
+    background: #b6e2d0;
+    .tab-item{
+      float:left;
+      height:100%;
+      padding:6px;
+      border-right:1px solid #b3bdb2;
+      -webkit-user-select: none;
+      &:active{
+        background-color:#abd2c2;
+      }
+      &.selected{
+        background-color:#60d688;
+      }
+    }
+  }
+  textarea{
+    width:100%;
+    height:100%;
+    overflow:auto;
+    resize: none;
+    border:none;
+  }
+  .content{
+    width:100%;
+    height:100%;
+    overflow:auto;
+  }
+}
 .iframe-html-comp{
   border:none;
   position: absolute;
