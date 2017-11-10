@@ -104,10 +104,11 @@
     HttpRequest.prototype['POST'] = function () {
         var option = this.template();
         if (this.contentType.name === 'Multipart') {
-            option.contentType = false;
             option.data = this.body.getFormData();
         } else if (this.contentType.name === 'Json') {
             option.data = this.body.toJson();
+        }else if(this.contentType.name === 'Urlencoded'){
+            option.data = this.body.serializeArray();
         } else {
             option.contentType = false;
             option.data = this.body.serializeArray();
